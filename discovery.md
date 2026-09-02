@@ -74,7 +74,11 @@ reader's lap.
       person who brought the work.
 2. **Gather.** Find and pull the artifacts. This includes searching and scraping the
    web for what is out there, not only reading what you were handed. Log every source
-   with a link and a date. (The folder instructs this. The AI performs it at run time.)
+   with a link and a date, and to the granularity a card will later cite it at (the
+   `path:line`, the `#heading`, the transcript timestamp plus quote), per
+   `reference/source-types.md`. A source logged only as a container ("the interview",
+   "the repo") will not survive as a citation. (The folder instructs this. The AI
+   performs it at run time.)
 3. **Build the reference frame (the yardstick).** Before anything can be called a gap,
    build what a complete version of this territory would look like, per
    `reference/reference-frames.md`. Two sources, both cited:
@@ -110,7 +114,8 @@ territory, the folder you create for it). It carries:
 - **Run header:** the user's question, the later reader (say if it is a model), the
   territory class, the lens mix with a role and reason per lens, the external-depth
   budget.
-- **Source log:** every artifact, with a link and a date.
+- **Source log:** every artifact, with a link and a date, cited to the openable
+  locator it will be referenced at (see `reference/source-types.md`).
 - **Reference frame:** the analogues studied (model, successes, failures, dimensions)
   and the dimensions a complete version of this territory should carry. This is the
   yardstick Pass 2 measures absence against.

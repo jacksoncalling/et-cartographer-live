@@ -79,7 +79,8 @@ The folder IS the agent's operating instructions. Each file does one job.
 - `rules.md` — the anti-fabrication law, live/pending/leftover/ghost marking, the two gaps, the research trigger, the refusals.
 - `discovery.md` — Pass 1 of the run (inventory + yardstick): scope + lens mix, gather, build the reference frame, shelve. Writes `Inventory.md` into the run's map folder. Inventory before cards.
 - `cartography.md` — Pass 2 of the run (the map): wire, confirm ghosts via the degree tripwire, hunt gaps (internal structural + external reference-frame), write catalog / cards / evaluative layer, iterate. Reads `Inventory.md`; one agent, one session, not a pipeline.
-- `reference/card-types.md` — the closed set of 6 nouns, the canonical movements, the walk order, the naming collisions.
+- `reference/card-types.md` — the closed set of 6 nouns, the canonical movements, the walk order, the naming collisions. Every card ends with a Source line.
+- `reference/source-types.md` — what a citation is: the two source kinds (a URL, or an internal document that ships with the map), the granularity rule (cite the smallest openable locator: `path:line`, `#heading`, or a transcript timestamp plus a short verbatim quote, never the container), and the optional inline `[S#]` tags and `verified:` stamp. The build renders the card Source line as clickable links via the map's `repo_base`.
 - `reference/discovery-lenses.md` — the catalogue of reading models (the deck). How to classify a territory (Technical / Business / Creator) and assemble a lens mix (open / deepen / converge) to hunt and shelve with. A lens generates questions, so the deck may be canned; the reference frame generates verdicts, so it must be earned.
 - `reference/gap-heuristics.md` — the by-hand gap scan and the computed tool, and how to read them.
 - `reference/reference-frames.md` — how to build the absence yardstick per run (never canned).
@@ -124,7 +125,8 @@ The graph: nodes = object notes; edges = resolved `[[wikilinks]]`. Navigation no
 | Stone Masters map source | `map-stonemasters/Catalog.md`, `map-stonemasters/North Star.md`, `map-stonemasters/objects/*.md` |
 | Gap report tool | `tools/gap-scan.py` (accepts map path as argument) |
 | Artifact builder (all territories) | `tools/build-artifact.py <map-folder>` |
-| Per-map build config | `<map-folder>/build.json` (template, output name, shelf rules) |
+| Per-map build config | `<map-folder>/build.json` (template, output name, shelf rules, optional `repo_base` for clickable source links) |
+| Source grammar | `reference/source-types.md` (what a citation is; how deep it points) |
 | Template skins | `tools/template.html` (ET), `tools/template-stonemasters.html`, `tools/template-openevidence.html` |
 | OpenEvidence map generator (one-off scaffold) | `tools/build-openevidence-map.py` |
 | Generated HTML output | `output/` (do not hand-edit files here) |
@@ -175,6 +177,13 @@ python -m http.server 8137
 - **The artifact is data-driven.** Never hand-edit the `output/*.html`. Change the
   `map/` notes (or the template skin, or the shelf rules in `<map>/build.json`), then
   rerun `python tools/build-artifact.py <map-folder>`.
+- **Citations are clickable when `repo_base` is set.** The builder reads each card's
+  `Source:` line and turns URLs and internal `path:line` locators into links. Set
+  `"repo_base"` in the map's `build.json` (a GitHub blob URL) to make internal
+  citations resolve to the real file at the real line; with no `repo_base` they stay
+  plain text. The map shipping inside the repo it maps (as Kustos does) is what makes
+  those links open for any reader. The grammar for what to cite is
+  `reference/source-types.md`.
 - **Hero copy is dynamic.** The artifact reads the top real hub and the top ghost
   from the data, so re-running discovery keeps the headline true.
 - **Reuse needs a different map, not a different cartographer, and not a different

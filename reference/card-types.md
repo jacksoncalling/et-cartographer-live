@@ -140,6 +140,25 @@ zoning · status: partial/leftover]:*
 
 ---
 
+## What every card must also end with: a Source line
+
+After Hits / Does not hit, every card carries a **Source line** citing the smallest
+openable locator, so a reader can check the claim in one hop. The grammar (URL vs
+internal document, the per-type locators, the optional inline `[S#]` tags and
+`verified:` stamp) is `reference/source-types.md`. The build reads this line and
+renders it as clickable links on the card, using the map's `repo_base`.
+
+```
+Source: scripts/rank.py:96-175 ; profil/kanon.md
+Source: https://youtu.be/OtkM18P1GeE?t=42 · verified: 2026-09-02
+Source: interview-2026-08-16.md [00:14:32] "cruising to big clients"
+```
+
+A card with no Source line is not finished. A card whose Source names only a
+container ("the repo", "the interview") is not cited, it is labelled.
+
+---
+
 ## Naming collisions in this territory (write them down — required)
 
 - **Node** — Bauwens' "excellent node" (a whole institution/community) vs a graph

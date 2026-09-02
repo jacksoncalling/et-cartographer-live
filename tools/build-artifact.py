@@ -26,6 +26,7 @@ cfg = json.load(open(CONFIG, encoding="utf-8"))
 TEMPLATE = os.path.join(HERE, cfg["template"])
 OUT = os.path.join(ROOT, "output", cfg["out"])
 SHELVES = cfg["shelves"]
+REPO_BASE = cfg.get("repo_base", "").rstrip("/")
 EXCLUDE = {"Catalog", "North Star"}
 
 name = lambda p: os.path.splitext(os.path.basename(p))[0]
@@ -48,6 +49,35 @@ def split_fm(txt):
 LINK = re.compile(r"\[\[([^\]|#]+)")
 def clean(s): return s.replace("[[", "").replace("]]", "").strip()
 
+# A source citation is a chain of locators. Turn each URL and each internal
+# path:line into a clickable link (path:line needs the map's repo_base). Plain
+# text between locators is kept as-is, so a `verified:` stamp or a quote survives.
+SRC_TOKEN = re.compile(
+    r"(?P<url>https?://[^\s;)\]]+)"
+    r"|(?P<path>[A-Za-z0-9_][A-Za-z0-9_./\-]*\.(?:py|md|json|ya?ml|html?|txt|js|ts|toml|cfg|csv|pdf))"
+    r"(?::(?P<l1>\d+)(?:-(?P<l2>\d+))?)?")
+
+def linkify_source(text):
+    """Render a Source line as HTML with URLs and internal file:line locators as
+    links. path:line resolves against REPO_BASE (e.g. a GitHub blob URL); with no
+    repo_base the path stays plain text, still a valid citation, just not clickable."""
+    if not text:
+        return ""
+    def repl(m):
+        if m.group("url"):
+            u = m.group("url").rstrip(".,;")
+            return '<a href="%s" target="_blank" rel="noopener">%s</a>' % (u, u)
+        path, l1, l2 = m.group("path"), m.group("l1"), m.group("l2")
+        label = m.group(0)
+        if not REPO_BASE:
+            return label
+        frag = ""
+        if l1:
+            frag = "#L" + l1 + ("-L" + l2 if l2 else "")
+        return '<a href="%s/%s%s" target="_blank" rel="noopener">%s</a>' % (
+            REPO_BASE, path, frag, label)
+    return SRC_TOKEN.sub(repl, text)
+
 def parse_body(body):
     lines = body.splitlines()
     title = None; i = 0
@@ -58,11 +88,20 @@ def parse_body(body):
     while i < len(lines) and lines[i].strip():
         desc.append(lines[i].strip()); i += 1
     hits = miss = None
-    for l in lines:
+    source = None
+    for idx, l in enumerate(lines):
         s = l.strip()
         if s.lower().startswith("- hits:"): hits = clean(s.split(":", 1)[1])
         elif s.lower().startswith("- does not hit:"): miss = clean(s.split(":", 1)[1])
-    return title, clean(" ".join(desc)), hits, miss
+        elif s.lower().startswith("source:"):
+            # capture the Source line plus any following non-blank lines (the
+            # optional multi-line [S#] tag form), so the whole reference list is kept.
+            parts = [s.split(":", 1)[1].strip()]
+            j = idx + 1
+            while j < len(lines) and lines[j].strip():
+                parts.append(lines[j].strip()); j += 1
+            source = " ".join(p for p in parts if p)
+    return title, clean(" ".join(desc)), hits, miss, source
 
 def movements_zone(body):
     """Extract the typed-movements zone where [[wikilinks]] count as edges.
@@ -94,7 +133,7 @@ north_star = ""
 for p in files:
     nid = name(p)
     fm, body = split_fm(read(p))
-    title, desc, hits, miss = parse_body(body)
+    title, desc, hits, miss, source = parse_body(body)
     if nid == "North Star": north_star = desc
     # Navigation / checkpoint nodes are never graph objects (matches gap-scan.py):
     # by filename, and by frontmatter type: meta (Catalog, North Star, Inventory).
@@ -108,7 +147,8 @@ for p in files:
     records[nid] = dict(id=nid, label=nid, type=fm.get("type", "Object"),
                         status=fm.get("status", "live").lower(), kind=fm.get("kind", ""),
                         hub=fm.get("hub", ""), subtype=fm.get("subtype", "").lower(),
-                        desc=desc, hits=hits, doesNotHit=miss, connects=connects)
+                        desc=desc, hits=hits, doesNotHit=miss, connects=connects,
+                        source=linkify_source(source))
 
 # ---- graph (object nodes only) ----
 adj = defaultdict(set)

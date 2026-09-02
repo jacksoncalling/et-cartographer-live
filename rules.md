@@ -12,7 +12,13 @@ Ported from the DAS GESETZ of the ET-Förder-Navigator. A cold reader, human or
 model, will act on this map. One invented object and the map is worse than nothing.
 
 1. **Every card cites its source.** A link, a file, a dated document. No source, no
-   card. A claim with no anchor does not get written down as a fact.
+   card. A claim with no anchor does not get written down as a fact. The citation
+   names the **smallest openable locator**, not the container: a `path:line`, a
+   `#heading`, a page, or a transcript timestamp plus a short verbatim quote, never
+   just "the repo" or "the interview". The full grammar (the two source kinds, the
+   granularity rule, the optional inline tags and `verified:` stamp) is
+   `reference/source-types.md`. The one test: a reader must reach the exact passage
+   in one hop.
 2. **Verified vs open is always marked.** live / pending / leftover / ghost is visible
    on every object (below). A pending or ghost object never renders as live fact.
 3. **The model voices; the structure detects.** The cartographer names what the
