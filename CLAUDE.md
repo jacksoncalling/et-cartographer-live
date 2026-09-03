@@ -1,61 +1,48 @@
-# THE CARTOGRAPHER — Project Context
+# ET-Cartographer Live — Project Context
 
-> Load this at the start of every session. Start here, not with the phase history.
+> For Claude: load this at the start of every session.
+> For Replit operators: this is the architectural map of the codebase.
 
 ---
 
 ## What This Is
 
-**The Cartographer** is a droppable, ICM-style folder that turns an AI into a
-cartographer for a socio-technical ecosystem. Point it at a real body of work
-(documents, a registry, a repo, a vault) and it leaves a **walkable map**: a
-catalog, one typed card per object, the live/leftover/ghost status of each, and
-the gaps (named-but-unwired ghosts, and unbridged clusters) made visible. The
-later reader is often a cold model.
+A **living cartographic demo** built for technology-transfer managers in the Einstein
+Telescope Euregio campaign. The map shows 41 objects — actors, instruments, funding
+vehicles, decisions, and 6 named gaps — across the DE/BE/NL Euregio. A docked
+**shopkeeper agent** answers questions, walks the user to a curated gap, and can write
+what the user knows back into the map as a cited card, redrawing the graph.
 
-Built for two audiences:
-- **The Cartographer contest (Cliff Notes / ICM).** The submission is the folder
-  plus a worked example on a real territory.
-- **AGIT (Aachen tech transfer).** A reuse: the technology manager's map of the
-  Einstein Telescope Euregio campaign, and a wedge for re-contact.
+First reader: Ralf-Peter Meyer, AGIT (Aachen tech transfer).
 
-**Worked territory:** the Einstein Telescope campaign to be hosted in the Euregio
-Meuse-Rhine (DE / BE / NL).
-**Published artifact:** https://claude.ai/code/artifact/a1e73ced-ee6b-4fb0-afd5-4905e4061bce
+Design rationale and build plan: `docs/living-cartographer-demo.md` and
+`docs/living-cartographer-PLAN.md`.
 
 ---
 
-## Current State — Updated 2026-08-23
+## Current State — Updated 2026-09-03
 
 ### What's working
-- **On GitHub:** https://github.com/jacksoncalling/et-cartographer (branch `main`).
-- **Three walked territories, three published artifacts:**
-  - ET Euregio (41 objects, ecosystem lens): https://claude.ai/code/artifact/a1e73ced-ee6b-4fb0-afd5-4905e4061bce
-  - OpenEvidence (56 objects, Business Model Canvas lens): https://claude.ai/code/artifact/02572122-e3bd-4af6-8605-4f14087a111e
-  - Stone Masters (21 objects, consulting-client map from two real conversations): https://claude.ai/code/artifact/5b1e7fa6-84a5-4989-9944-fea7ad2ac16f
-- **Edges = typed movements only.** All tools use `movements_zone`, so only
-  canonical relationships (not description mentions) count as graph edges.
-- **Artifact hero reframed and made legible:** the headline number is the count of
-  named absences, not a raw betweenness figure.
-- **`reference-frames.md` de-biased.** The yardstick is built per run from the
-  user's frameworks + two deeply-researched analogues, not a canned list.
-  `discovery.md` carries the reference-frame step and the anti-shallow rule.
-- **Output reorganized:** all generated HTML lives in `output/`, never the root.
+- **GitHub:** https://github.com/jacksoncalling/et-cartographer-live
+- **Replit:** deploy via `npm start` — Express serves the artifact + `/chat` SSE endpoint
+- **Map:** 41 objects, 63 edges, 2 components. Hero ghost: Financing vehicle (83.8 bet).
+  Top real hub: ET-InnoNet (218.9 bet).
+- **Shopkeeper:** Claude Haiku 4.5, streamed via SSE. System prompt assembled from the
+  cartographer folder files + map summary. Anti-fabrication law enforced.
+- **Ingest loop:** shopkeeper can propose a new card mid-conversation; frontend adds it
+  to the live graph without a page reload. In-session only (not committed to GitHub yet).
+- **Sources panel:** left rail lists every cited source from the map cards; user can
+  paste a new source and send it to the shopkeeper.
+- **graph_utils.py:** shared module for all Python tools — no more duplicate copies of
+  `brandes`, `split_fm`, `movements_zone`, etc.
 
-### Known issues / debt
-- **Card "centrality N.N" chips still show raw betweenness.** Could gloss to plain
-  language later; the hero is already fixed.
-- **Template header is hardcoded ET** (title / subtitle / footer); 3-line edit to
-  reuse, documented in README.
-- **Map carries fingerprints of our conversation.** `blind-run/` is a fresh
-  source-only re-run in progress (gitignored, out of the submission for now).
-- `examples.md` is a pre-second-pass snapshot; fine as a teaching sample.
-
-### What's next
-1. **Submit the contest**: repo link + 2–3 sentence blurb + artifact link.
-2. **German AGIT version**: first-person "how I would approach this as a technology
-   manager," plain framing, the map, then where I would dig next and who to contact.
-3. **Finish the `blind-run/` fresh map** and compare it to this one.
+### Known issues / next steps
+- **Ingest persistence:** new cards live only for the session tab. GitHub commit-back
+  (GitHub Contents API) is the promised upgrade. See `FUTURE.md`.
+- **map/map.json must be rebuilt** after any card edit:
+  `python tools/build-bundle.py map` then `python tools/build-artifact.py map`.
+- **Opening gap** is set in `map/build.json` under `"demo": {"openingGap": "..."}`.
+  Currently: `Value capture (ghost)`.
 
 ---
 
@@ -63,34 +50,56 @@ Meuse-Rhine (DE / BE / NL).
 
 | Layer | Technology |
 |-------|-----------|
-| The cartographer | A folder of markdown (identity / rules / discovery / reference), read by an AI agent |
-| Map output | One markdown note per object under `map/objects/`, `[[wikilinks]]` for movements, simple YAML frontmatter |
-| Gap engine | Pure-Python graph theory, no dependencies: Brandes betweenness + greedy-modularity communities |
-| Artifact | Self-contained HTML (inline CSS/JS, seeded force layout), generated from `map/` |
-| Agent | Claude, acting as the cartographer per the folder's instructions |
+| Cartographer method | Markdown folder (`identity.md`, `rules.md`, `reference/`) read by the agent |
+| Map source | `map/objects/*.md` — one note per object, `[[wikilinks]]` for edges, YAML frontmatter |
+| Bundle | `map/map.json` — emitted by `tools/build-bundle.py`; nodes carry betweenness tier, component, clean text |
+| Artifact | `output/et-cartographer.html` — self-contained HTML emitted by `tools/build-artifact.py` |
+| Backend | `server.js` — Node/Express; serves the artifact + streams Anthropic API via SSE at `/chat` |
+| Shopkeeper model | Claude Haiku 4.5 (`claude-haiku-4-5-20251001`); override via `MODEL_ID` env var |
+| Deploy | Replit — `.replit` sets `npm start`, port 3000 maps to external 80 |
 
 ---
 
-## Architecture: folder as architecture
+## Architecture
 
-The folder IS the agent's operating instructions. Each file does one job.
+```
+map/objects/*.md  (the cards)
+       |
+       v
+tools/build-bundle.py  --> map/map.json  (data contract)
+tools/build-artifact.py  --> output/et-cartographer.html  (the static artifact)
+       |
+       v
+server.js
+  GET /       serves output/et-cartographer.html
+  POST /chat  reads map/map.json + cartographer folder -> builds system prompt
+              streams Anthropic API -> SSE text + ingest events -> browser
+       |
+       v
+tools/template.html  (embedded in et-cartographer.html)
+  - catalog panel (left)
+  - card + graph view (center)
+  - shopkeeper chat panel (right, docked)
+  - sources panel (toggle)
+```
 
-- `identity.md` — who the cartographer is, the territory it walks, the reader (may be a model).
-- `rules.md` — the anti-fabrication law, live/pending/leftover/ghost marking, the two gaps, the research trigger, the refusals.
-- `discovery.md` — Pass 1 of the run (inventory + yardstick): scope + lens mix, gather, build the reference frame, shelve. Writes `Inventory.md` into the run's map folder. Inventory before cards.
-- `cartography.md` — Pass 2 of the run (the map): wire, confirm ghosts via the degree tripwire, hunt gaps (internal structural + external reference-frame), write catalog / cards / evaluative layer, iterate. Reads `Inventory.md`; one agent, one session, not a pipeline.
-- `reference/card-types.md` — the closed set of 6 nouns, the canonical movements, the walk order, the naming collisions. Every card ends with a Source line.
-- `reference/source-types.md` — what a citation is: the two source kinds (a URL, or an internal document that ships with the map), the granularity rule (cite the smallest openable locator: `path:line`, `#heading`, or a transcript timestamp plus a short verbatim quote, never the container), and the optional inline `[S#]` tags and `verified:` stamp. The build renders the card Source line as clickable links via the map's `repo_base`.
-- `reference/discovery-lenses.md` — the catalogue of reading models (the deck). How to classify a territory (Technical / Business / Creator) and assemble a lens mix (open / deepen / converge) to hunt and shelve with. A lens generates questions, so the deck may be canned; the reference frame generates verdicts, so it must be earned.
-- `reference/gap-heuristics.md` — the by-hand gap scan and the computed tool, and how to read them.
-- `reference/reference-frames.md` — how to build the absence yardstick per run (never canned).
-- `reference/glossary.md` — the lookup surface: every term in one or two lines, pointing to the file that owns its full definition. Names the two planes (objects vs the evaluative field) and the Terroir lineage of tensions and gradients.
-- `map/` — the OUTPUT of a run: `Inventory.md` (Pass 1 checkpoint), `Catalog.md` (front door), `North Star.md` (meta), `objects/` (the cards).
-- `tools/` — `gap-scan.py` (report), `build-artifact.py` + `template.html` (the HTML).
+**The folder IS the agent's operating instructions.** Each file does one job:
+
+- `identity.md` — who the cartographer is, the territory, the reader
+- `rules.md` — anti-fabrication law, live/pending/leftover/ghost marking, gap types, refusals
+- `discovery.md` — Pass 1 protocol (inventory + reference frame)
+- `cartography.md` — Pass 2 protocol (wiring, ghost confirmation, gap hunting, card writing)
+- `examples.md` — worked card examples; included in agent context so it knows the schema
+- `reference/card-types.md` — the 6 nouns, canonical movements, walk order
+- `reference/source-types.md` — citation grammar; `path:line` locators become clickable links
+- `reference/gap-heuristics.md` — by-hand gap scan + how to read the computed report
+- `reference/reference-frames.md` — how to build the absence yardstick per run (never canned)
+- `reference/discovery-lenses.md` — reading models for classifying a territory
+- `reference/glossary.md` — lookup surface for every term
 
 ---
 
-## The object-note schema (map/objects/*.md)
+## Object-note schema (`map/objects/*.md`)
 
 ```
 ---
@@ -101,16 +110,18 @@ hub: <optional, e.g. "engagement">
 ---
 # Label
 
-One prose paragraph (the description). Links to neighbours as [[wikilinks]].
+One prose paragraph. Links to neighbours as [[wikilinks]].
 
 Typed movements as prose: Holds [[X]] · funded-by [[Y]] ...
 
 - Hits: what moves if this changes.
 - Does not hit: the obvious wrong neighbour.
+
+Source: <URL or path:line — the build renders this as a clickable link>
 ```
 
-The graph: nodes = object notes; edges = resolved `[[wikilinks]]`. Navigation nodes
-(`Catalog`, `North Star`) are **excluded** from the graph, in both tools.
+Graph: nodes = object notes; edges = resolved `[[wikilinks]]` in the movements zone only.
+Nav nodes (`Catalog`, `North Star`) are excluded from the graph in all tools.
 
 ---
 
@@ -118,102 +129,71 @@ The graph: nodes = object notes; edges = resolved `[[wikilinks]]`. Navigation no
 
 | What | Where |
 |---|---|
-| Method (the cartographer) | `identity.md`, `rules.md`, `discovery.md`, `cartography.md`, `README.md`, `examples.md` |
-| Reference | `reference/card-types.md`, `reference/discovery-lenses.md`, `reference/gap-heuristics.md`, `reference/reference-frames.md`, `reference/glossary.md` |
+| Cartographer method | `identity.md`, `rules.md`, `discovery.md`, `cartography.md`, `examples.md` |
+| Reference | `reference/` (6 files — card-types, source-types, gap-heuristics, reference-frames, discovery-lenses, glossary) |
 | ET Euregio map source | `map/Catalog.md`, `map/North Star.md`, `map/objects/*.md` |
-| OpenEvidence map source | `map-openevidence/Catalog.md`, `map-openevidence/North Star.md`, `map-openevidence/objects/*.md` |
-| Stone Masters map source | `map-stonemasters/Catalog.md`, `map-stonemasters/North Star.md`, `map-stonemasters/objects/*.md` |
-| Gap report tool | `tools/gap-scan.py` (accepts map path as argument) |
-| Artifact builder (all territories) | `tools/build-artifact.py <map-folder>` |
-| Per-map build config | `<map-folder>/build.json` (template, output name, shelf rules, optional `repo_base` for clickable source links) |
-| Source grammar | `reference/source-types.md` (what a citation is; how deep it points) |
-| Template skins | `tools/template.html` (ET), `tools/template-stonemasters.html`, `tools/template-openevidence.html` |
-| OpenEvidence map generator (one-off scaffold) | `tools/build-openevidence-map.py` |
-| Generated HTML output | `output/` (do not hand-edit files here) |
+| Map data bundle | `map/map.json` (rebuilt by `build-bundle.py` — never hand-edit) |
+| Build config | `map/build.json` (template, output name, shelf rules, repo_base, openingGap) |
+| Gap report | `tools/gap-scan.py` |
+| Bundle builder | `tools/build-bundle.py` |
+| Artifact builder | `tools/build-artifact.py` |
+| Shared graph primitives | `tools/graph_utils.py` (split_fm, clean, movements_zone, parse_body, brandes, communities, connected_components, bfs_all) |
+| Artifact template | `tools/template.html` |
+| Backend | `server.js` |
+| Generated artifact | `output/et-cartographer.html` (do not hand-edit) |
+| Design docs | `docs/living-cartographer-demo.md`, `docs/living-cartographer-PLAN.md` |
 
 ---
 
 ## How to run
 
 ```bash
-# gap report -- ET Euregio
+# rebuild the bundle (required after any card edit)
+python tools/build-bundle.py map
+
+# rebuild the artifact HTML
+python tools/build-artifact.py map
+
+# run the gap report
 python tools/gap-scan.py
 
-# gap report -- OpenEvidence
-python tools/gap-scan.py map-openevidence
-
-# rebuild an artifact -- one builder, pass the map folder (reads <map>/build.json)
-python tools/build-artifact.py map                # -> output/et-cartographer.html
-python tools/build-artifact.py map-openevidence   # -> output/openevidence-cartographer.html
-python tools/build-artifact.py map-stonemasters       # -> output/stonemasters-cartographer.html
-# then republish the output/*.html via the Artifact tool (same URL)
-
-# preview locally (JS runs only when served, not as a file:// snapshot)
-python -m http.server 8137
-# ET:            http://localhost:8137/output/et-cartographer.html
-# OpenEvidence:  http://localhost:8137/output/openevidence-cartographer.html
-# Stone Masters:     http://localhost:8137/output/stonemasters-cartographer.html
+# start the shopkeeper server locally (needs ANTHROPIC_API_KEY in env)
+npm install
+npm start
+# -> http://localhost:3000
 ```
 
+**Replit:** set `ANTHROPIC_API_KEY` as a secret, click Run. The `.replit` file handles everything.
+
 ---
 
-## Patterns & Gotchas
+## Patterns and Gotchas
 
-- **Nav nodes are excluded from the graph, not just the report.** The `Catalog`
-  links to everything; leaving it in the graph makes it an artificial mega-hub and
-  distorts every betweenness score. Both tools drop `type: meta` / `role:
-  front-door` nodes before computing.
-- **Two ghost flavors.** Named-but-unwired (a label with no real edges) and
-  required-but-absent (a link the chain needs that appears nowhere). Both are marked,
-  never deleted, and each carries a research question.
+- **Rebuild both after card edits.** `build-bundle.py` emits the data the server reads;
+  `build-artifact.py` emits the HTML the server serves. Both must be in sync.
+- **Nav nodes are excluded from the graph.** `Catalog` links to everything; including it
+  distorts every betweenness score. All tools drop `type: meta` nodes before computing.
+- **Two ghost flavors.** Named-but-unwired (no real edges) and required-but-absent
+  (link the chain needs, appears nowhere). Both marked, never deleted.
+- **Ingest nodes need `cluster`, not `component`.** `build-artifact.py` uses `cluster`
+  (0 or 1 for the two community halves); `build-bundle.py` uses `component` (connected-
+  component index). `ingestNode()` in the template translates `component` to `cluster`
+  before pushing to the graph.
 - **The reference frame is earned, never canned.** Build it per run from the user's
-  named frameworks + two deeply-researched analogues (their model, their successes
-  AND failures), matched to the territory's shape and scale. A dimension with no
-  source is a bias; drop it.
-- **Generate files with Write or Python, never shell heredocs.** This Bash
-  environment breaks on apostrophes and `<<'EOF'` delimiters in the command body.
-  Authoring markdown/HTML via the Write tool, or emitting files from a Python
-  script, avoids the quoting trap entirely.
-- **The artifact is data-driven.** Never hand-edit the `output/*.html`. Change the
-  `map/` notes (or the template skin, or the shelf rules in `<map>/build.json`), then
-  rerun `python tools/build-artifact.py <map-folder>`.
-- **Citations are clickable when `repo_base` is set.** The builder reads each card's
-  `Source:` line and turns URLs and internal `path:line` locators into links. Set
-  `"repo_base"` in the map's `build.json` (a GitHub blob URL) to make internal
-  citations resolve to the real file at the real line; with no `repo_base` they stay
-  plain text. The map shipping inside the repo it maps (as Kustos does) is what makes
-  those links open for any reader. The grammar for what to cite is
-  `reference/source-types.md`.
-- **Hero copy is dynamic.** The artifact reads the top real hub and the top ghost
-  from the data, so re-running discovery keeps the headline true.
-- **Reuse needs a different map, not a different cartographer, and not a different
-  builder.** One `build-artifact.py` serves every territory. A new territory needs a
-  new map folder, a `build.json` in it (template skin, output name, shelf rules), and
-  a template skin (clone an existing one and swap the header lines). Then rerun
-  `gap-scan.py` and `build-artifact.py` against the new folder.
+  named frameworks + two deeply-researched analogues. A dimension with no source is a
+  bias; drop it.
+- **Do not hand-edit `output/et-cartographer.html`.** Change `map/` notes or
+  `tools/template.html`, then rerun the builders.
+- **`graph_utils.py` is the single source** for `split_fm`, `brandes`, and friends.
+  Do not copy these functions into other files.
 
 ---
 
-## Phase History (compressed)
+## Workflow Rules (for Claude sessions)
 
-| Phase | What happened |
-|---|---|
-| Design | Chose territory (ET Euregio), merged our + Gemini's grammar, set the 6-noun card model, live/leftover/ghost, hits/does-not-hit. |
-| First map | Built `map/` (33 objects) from the public ET-Förder-Navigator corpus + ET-EMR sources. Cited cards, one ghost, one tension, a correction log. |
-| Gap engine | Added `gap-scan.py` (betweenness + modularity), `gap-heuristics.md`, `reference-frames.md`. Ghost-with-high-betweenness became the signature finding. |
-| Artifact | Built the walkable HTML (catalog + card + network toggle), published private. |
-| Second pass | Added the engagement layer + 5 required-but-absent ghosts (41 objects); reshaped the graph; de-biased `reference-frames.md`. |
-
----
-
-## Workflow Rules (for Claude)
-
-- **Start every session** by reading this file and the Current State section.
-- **The map is the output, the folder is the method.** To change the map, run
-  discovery and edit `map/`; do not edit the artifact directly.
-- **Keep the two tools consistent** (`gap-scan.py` and `build-artifact.py` compute
-  the same object graph). If you change one graph-construction rule, change both.
-- **Cite source for every card; mark verified vs open; never fill a silence with a
-  guess.** The file wins over the card.
-- **Do not commit or push without Max asking.** Writing-mechanics: no em-dashes in
-  anything client-facing.
+- Start every session by reading this file and noting the Current State date.
+- The map is the output; the folder is the method. To change the map, edit `map/` and rebuild.
+- Cite source for every card; mark verified vs open; never fill a silence with a guess.
+- Keep `gap-scan.py` and `build-artifact.py` consistent on graph-construction rules.
+- Do not commit or push without Josh asking.
+- No em-dashes in anything user-facing. Ever.
