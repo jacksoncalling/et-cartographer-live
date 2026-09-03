@@ -1,6 +1,9 @@
 {
   "template": "template.html",
   "out": "et-cartographer.html",
+  "demo": {
+    "openingGap": "Value capture (ghost)"
+  },
   "shelves": [
     {"when": [["status", "eq", "ghost"]], "shelf": "Ghosts"},
     {"when": [["hub", "eq", "engagement"]], "shelf": "Engagement"},

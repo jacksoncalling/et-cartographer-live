@@ -1,0 +1,1185 @@
+{
+  "nodes": [
+    {
+      "id": "AGIT",
+      "label": "AGIT",
+      "type": "Actor",
+      "status": "live",
+      "kind": "",
+      "hub": "",
+      "desc": "The RWTH Technology Transfer Office for ET. Works the company layer, not the science layer.",
+      "movements": "The RWTH Technology Transfer Office for ET. Works the company layer, not the science layer.\nHolds [[ET2SMEs voucher]] · registers-into [[CRAFT registry]] · home [[DE-NRW]] · serves [[RWTH Aachen]]",
+      "hits": "SME onboarding, the voucher.",
+      "doesNotHit": "the research-grant rails (DFG and peers).",
+      "source": "",
+      "connects": [
+        "ET2SMEs voucher",
+        "CRAFT registry",
+        "DE-NRW",
+        "RWTH Aachen"
+      ],
+      "bet": 131.0,
+      "tier": "Load-bearing",
+      "component": 0
+    },
+    {
+      "id": "AI coordination layer (ghost)",
+      "label": "AI coordination layer (ghost)",
+      "type": "Ghost",
+      "status": "ghost",
+      "kind": "",
+      "hub": "",
+      "desc": "A layer that coordinates supply chains, timeframes and gaps across the ecosystem, and reads the graph the way this map does. Absent. Research: is any cross-actor coordination tooling in use beyond static directories?",
+      "movements": "A layer that coordinates supply chains, timeframes and gaps across the ecosystem, and reads the graph the way this map does. Absent. Research: is any cross-actor coordination tooling in use beyond static directories?\nRelates-to [[CRAFT registry]] [[ET-InnoNet]]",
+      "hits": "",
+      "doesNotHit": "",
+      "source": "",
+      "connects": [
+        "CRAFT registry",
+        "ET-InnoNet"
+      ],
+      "bet": 0.0,
+      "tier": "Leaf",
+      "component": 0
+    },
+    {
+      "id": "BE-Flanders",
+      "label": "BE-Flanders",
+      "type": "Jurisdiction",
+      "status": "live",
+      "kind": "",
+      "hub": "",
+      "desc": "A territorial or legal authority envelope.",
+      "movements": "A territorial or legal authority envelope.",
+      "hits": "",
+      "doesNotHit": "",
+      "source": "",
+      "connects": [],
+      "bet": 0.0,
+      "tier": "Leaf",
+      "component": 0
+    },
+    {
+      "id": "BE-Wallonia",
+      "label": "BE-Wallonia",
+      "type": "Jurisdiction",
+      "status": "live",
+      "kind": "",
+      "hub": "",
+      "desc": "A territorial or legal authority envelope.",
+      "movements": "A territorial or legal authority envelope.",
+      "hits": "",
+      "doesNotHit": "",
+      "source": "",
+      "connects": [],
+      "bet": 0.0,
+      "tier": "Leaf",
+      "component": 0
+    },
+    {
+      "id": "BGR",
+      "label": "BGR",
+      "type": "Actor",
+      "status": "live",
+      "kind": "",
+      "hub": "",
+      "desc": "The intergovernmental body that installed Working Group - Site Selection. Governance is wired here.",
+      "movements": "The intergovernmental body that installed [[Working Group - Site Selection]]. Governance is wired here.\nInstalled to [[Working Group - Site Selection]]",
+      "hits": "",
+      "doesNotHit": "",
+      "source": "",
+      "connects": [
+        "Working Group - Site Selection"
+      ],
+      "bet": 0.0,
+      "tier": "Leaf",
+      "component": 0
+    },
+    {
+      "id": "Bidbook",
+      "label": "Bidbook",
+      "type": "Instrument",
+      "status": "pending",
+      "kind": "procedure",
+      "hub": "",
+      "desc": "The comparable evidence pack each candidate site must submit. Criteria set by Working Group - Site Selection.",
+      "movements": "The comparable evidence pack each candidate site must submit. Criteria set by [[Working Group - Site Selection]].\nGoverned-by [[Working Group - Site Selection]] · feeds [[Site decision]]",
+      "hits": "",
+      "doesNotHit": "",
+      "source": "",
+      "connects": [
+        "Working Group - Site Selection",
+        "Site decision"
+      ],
+      "bet": 0.0,
+      "tier": "Leaf",
+      "component": 0
+    },
+    {
+      "id": "CRAFT registry",
+      "label": "CRAFT registry",
+      "type": "Shared Resource",
+      "status": "live",
+      "kind": "",
+      "hub": "",
+      "desc": "The EMR-wide company mapping registry (480+ orgs). A thin cross-border overlay; registration is not activation.",
+      "movements": "The EMR-wide company mapping registry (480+ orgs). A thin cross-border overlay; registration is not activation.\nRegistered-via [[AGIT]]\nNote: naming collision with the AGIT ET-Mapping-Tool (unresolved).",
+      "hits": "",
+      "doesNotHit": "",
+      "source": "",
+      "connects": [
+        "AGIT"
+      ],
+      "bet": 12.7,
+      "tier": "Connector",
+      "component": 0
+    },
+    {
+      "id": "Cross-border IP framework (ghost)",
+      "label": "Cross-border IP framework (ghost)",
+      "type": "Ghost",
+      "status": "ghost",
+      "kind": "",
+      "hub": "",
+      "desc": "A standard for sharing pre-competitive R&D IP across German, Dutch and Belgian SMEs co-developing ET components. Named nowhere. Its absence adds legal drag to joint bids. Research: absent, or handled case by case?",
+      "movements": "A standard for sharing pre-competitive R&D IP across German, Dutch and Belgian SMEs co-developing ET components. Named nowhere. Its absence adds legal drag to joint bids. Research: absent, or handled case by case?\nChallenges [[Interreg EMR]] · required-by [[ET2SMEs voucher]]",
+      "hits": "",
+      "doesNotHit": "",
+      "source": "",
+      "connects": [
+        "Interreg EMR",
+        "ET2SMEs voucher"
+      ],
+      "bet": 0.0,
+      "tier": "Leaf",
+      "component": 0
+    },
+    {
+      "id": "DE-NRW",
+      "label": "DE-NRW",
+      "type": "Jurisdiction",
+      "status": "live",
+      "kind": "",
+      "hub": "",
+      "desc": "A territorial or legal authority envelope.",
+      "movements": "A territorial or legal authority envelope.",
+      "hits": "",
+      "doesNotHit": "",
+      "source": "",
+      "connects": [],
+      "bet": 7.6,
+      "tier": "Connector",
+      "component": 0
+    },
+    {
+      "id": "DFG",
+      "label": "DFG",
+      "type": "Instrument",
+      "status": "live",
+      "kind": "national research funder",
+      "hub": "",
+      "desc": "German science funder. Pays ONLY German institutions. A silo wall.",
+      "movements": "German science funder. Pays ONLY German institutions. A silo wall.\nServes [[DE-NRW]] · contested-in [[Tension - National funding silos]]",
+      "hits": "",
+      "doesNotHit": "",
+      "source": "",
+      "connects": [
+        "DE-NRW",
+        "Tension - National funding silos"
+      ],
+      "bet": 15.6,
+      "tier": "Connector",
+      "component": 0
+    },
+    {
+      "id": "E-TEST",
+      "label": "E-TEST",
+      "type": "Shared Resource",
+      "status": "live",
+      "kind": "",
+      "hub": "",
+      "desc": "Cryogenic silicon mirror prototype plus underground geology study. Cross-border partners.",
+      "movements": "Cryogenic silicon mirror prototype plus underground geology study. Cross-border partners.\nPartners [[ULiege]] [[RWTH Aachen]] · funded-via [[Interreg EMR]]",
+      "hits": "",
+      "doesNotHit": "",
+      "source": "",
+      "connects": [
+        "ULiege",
+        "RWTH Aachen",
+        "Interreg EMR"
+      ],
+      "bet": 56.8,
+      "tier": "Bridge",
+      "component": 0
+    },
+    {
+      "id": "ERC Consolidator",
+      "label": "ERC Consolidator",
+      "type": "Instrument",
+      "status": "live",
+      "kind": "research grant",
+      "hub": "",
+      "desc": "Single-researcher EU grant. Funds SILENT. EU-level, but not a cross-border consortium instrument.",
+      "movements": "Single-researcher EU grant. Funds [[SILENT]]. EU-level, but not a cross-border consortium instrument.\nAnchored-in [[EU]] · funds [[SILENT]]",
+      "hits": "",
+      "doesNotHit": "",
+      "source": "",
+      "connects": [
+        "SILENT",
+        "EU"
+      ],
+      "bet": 68.9,
+      "tier": "Bridge",
+      "component": 0
+    },
+    {
+      "id": "ESFRI framework",
+      "label": "ESFRI framework",
+      "type": "Instrument",
+      "status": "live",
+      "kind": "framework",
+      "hub": "",
+      "desc": "The roadmap listing. A framework, NOT a funding programme. Mistaking it for a financing vehicle is the tripwire.",
+      "movements": "The roadmap listing. A framework, NOT a funding programme. Mistaking it for a financing vehicle is the tripwire.\nAnchored-in [[EU]] · frames [[ET instrument]]",
+      "hits": "",
+      "doesNotHit": "",
+      "source": "",
+      "connects": [
+        "EU",
+        "ET instrument"
+      ],
+      "bet": 159.6,
+      "tier": "Load-bearing",
+      "component": 0
+    },
+    {
+      "id": "ET instrument",
+      "label": "ET instrument",
+      "type": "Shared Resource",
+      "status": "pending",
+      "kind": "",
+      "hub": "",
+      "desc": "The telescope itself. The heavy commons. About 1.9 Bn.",
+      "movements": "The telescope itself. The heavy commons. About 1.9 Bn.\nFramed-by [[ESFRI framework]] · needs [[Financing vehicle (ghost)]]",
+      "hits": "",
+      "doesNotHit": "",
+      "source": "",
+      "connects": [
+        "ESFRI framework",
+        "Financing vehicle (ghost)"
+      ],
+      "bet": 64.9,
+      "tier": "Bridge",
+      "component": 0
+    },
+    {
+      "id": "ET-EMR news",
+      "label": "ET-EMR news",
+      "type": "Shared Resource",
+      "status": "live",
+      "kind": "",
+      "hub": "engagement",
+      "desc": "The public news and updates stream on the ET-EMR site. Transparency over a long horizon: how the ecosystem is told what is happening.",
+      "movements": "The public news and updates stream on the ET-EMR site. Transparency over a long horizon: how the ecosystem is told what is happening.\nInforms-about [[Working Group - Site Selection]] · pairs-with [[ET-InnoNet]]",
+      "hits": "",
+      "doesNotHit": "",
+      "source": "",
+      "connects": [
+        "Working Group - Site Selection",
+        "ET-InnoNet"
+      ],
+      "bet": 176.4,
+      "tier": "Load-bearing",
+      "component": 0
+    },
+    {
+      "id": "ET-InnoNet",
+      "label": "ET-InnoNet",
+      "type": "Actor",
+      "status": "live",
+      "kind": "",
+      "hub": "engagement",
+      "desc": "The AGIT ET innovation network that keeps regional companies engaged with the campaign. Part of how the ecosystem is kept active, not just mapped.",
+      "movements": "The AGIT ET innovation network that keeps regional companies engaged with the campaign. Part of how the ecosystem is kept active, not just mapped.\nRun-by [[AGIT]] · feeds [[CRAFT registry]] · pairs-with [[ET2SMEs voucher]]",
+      "hits": "",
+      "doesNotHit": "",
+      "source": "",
+      "connects": [
+        "AGIT",
+        "CRAFT registry",
+        "ET2SMEs voucher"
+      ],
+      "bet": 218.9,
+      "tier": "Load-bearing",
+      "component": 0
+    },
+    {
+      "id": "ET2SMEs voucher",
+      "label": "ET2SMEs voucher",
+      "type": "Instrument",
+      "status": "leftover",
+      "kind": "voucher",
+      "hub": "",
+      "desc": "A low-threshold SME voucher. Completed programme: 23 firms, 11 projects.",
+      "movements": "A low-threshold SME voucher. Completed programme: 23 firms, 11 projects.\nUnder [[Interreg EMR]] · held-by [[AGIT]]",
+      "hits": "",
+      "doesNotHit": "",
+      "source": "",
+      "connects": [
+        "Interreg EMR",
+        "AGIT"
+      ],
+      "bet": 82.0,
+      "tier": "Bridge",
+      "component": 0
+    },
+    {
+      "id": "ETO",
+      "label": "ETO",
+      "type": "Actor",
+      "status": "live",
+      "kind": "",
+      "hub": "",
+      "desc": "Coordinates the Geometry Comparison track, run separately from site selection on purpose.",
+      "movements": "Coordinates the [[Geometry Comparison]] track, run separately from site selection on purpose.\nCoordinates-with [[Working Group - Site Selection]]",
+      "hits": "",
+      "doesNotHit": "",
+      "source": "",
+      "connects": [
+        "Geometry Comparison",
+        "Working Group - Site Selection"
+      ],
+      "bet": 27.3,
+      "tier": "Connector",
+      "component": 0
+    },
+    {
+      "id": "EU-Meuse-Rhine",
+      "label": "EU-Meuse-Rhine",
+      "type": "Jurisdiction",
+      "status": "live",
+      "kind": "",
+      "hub": "",
+      "desc": "A territorial or legal authority envelope.",
+      "movements": "A territorial or legal authority envelope.",
+      "hits": "",
+      "doesNotHit": "",
+      "source": "",
+      "connects": [],
+      "bet": 0.0,
+      "tier": "Leaf",
+      "component": 0
+    },
+    {
+      "id": "EU",
+      "label": "EU",
+      "type": "Jurisdiction",
+      "status": "live",
+      "kind": "",
+      "hub": "",
+      "desc": "A territorial or legal authority envelope.",
+      "movements": "A territorial or legal authority envelope.",
+      "hits": "",
+      "doesNotHit": "",
+      "source": "",
+      "connects": [],
+      "bet": 171.3,
+      "tier": "Load-bearing",
+      "component": 0
+    },
+    {
+      "id": "Events and workshops",
+      "label": "Events and workshops",
+      "type": "Shared Resource",
+      "status": "live",
+      "kind": "",
+      "hub": "engagement",
+      "desc": "Public symposia, workshops and outreach that cultivate the ecosystem and keep organisations active around the campaign.",
+      "movements": "Public symposia, workshops and outreach that cultivate the ecosystem and keep organisations active around the campaign.\nPairs-with [[ET-InnoNet]] · feeds [[CRAFT registry]]",
+      "hits": "",
+      "doesNotHit": "",
+      "source": "",
+      "connects": [
+        "ET-InnoNet",
+        "CRAFT registry"
+      ],
+      "bet": 0.0,
+      "tier": "Leaf",
+      "component": 0
+    },
+    {
+      "id": "Financing vehicle (ghost)",
+      "label": "Financing vehicle (ghost)",
+      "type": "Ghost",
+      "status": "ghost",
+      "kind": "",
+      "hub": "",
+      "desc": "Everyone references the 1.9 Bn funded across DE/BE/NL. No legal or financial entity yet routes construction money across the three states. Governance procedure is live; the financing vehicle is not.",
+      "movements": "Everyone references the 1.9 Bn funded across DE/BE/NL. No legal or financial entity yet routes construction money across the three states. Governance procedure is live; the financing vehicle is not.\nReferenced-by [[ET instrument]] [[Site decision]] [[ESFRI framework]]\nTripwire: a governance procedure is not a financing vehicle.",
+      "hits": "",
+      "doesNotHit": "",
+      "source": "",
+      "connects": [
+        "ET instrument",
+        "Site decision",
+        "ESFRI framework"
+      ],
+      "bet": 83.8,
+      "tier": "Bridge",
+      "component": 0
+    },
+    {
+      "id": "FNRS",
+      "label": "FNRS",
+      "type": "Instrument",
+      "status": "live",
+      "kind": "national research funder",
+      "hub": "",
+      "desc": "Frankophone-Belgian science funder. Pays ONLY Wallonia and Brussels.",
+      "movements": "Frankophone-Belgian science funder. Pays ONLY Wallonia and Brussels.\nServes [[BE-Wallonia]] · contested-in [[Tension - National funding silos]]",
+      "hits": "",
+      "doesNotHit": "",
+      "source": "",
+      "connects": [
+        "BE-Wallonia",
+        "Tension - National funding silos"
+      ],
+      "bet": 26.5,
+      "tier": "Connector",
+      "component": 0
+    },
+    {
+      "id": "FWO",
+      "label": "FWO",
+      "type": "Instrument",
+      "status": "live",
+      "kind": "national research funder",
+      "hub": "",
+      "desc": "Flemish science funder. Pays ONLY Flemish institutions.",
+      "movements": "Flemish science funder. Pays ONLY Flemish institutions.\nServes [[BE-Flanders]] · contested-in [[Tension - National funding silos]]",
+      "hits": "",
+      "doesNotHit": "",
+      "source": "",
+      "connects": [
+        "BE-Flanders",
+        "Tension - National funding silos"
+      ],
+      "bet": 38.0,
+      "tier": "Connector",
+      "component": 0
+    },
+    {
+      "id": "Geometry Comparison",
+      "label": "Geometry Comparison",
+      "type": "Decision",
+      "status": "pending",
+      "kind": "",
+      "hub": "",
+      "desc": "Triangle single-site vs double-L multi-site. Coordinated by ETO, run separately from site selection but linked.",
+      "movements": "Triangle single-site vs double-L multi-site. Coordinated by [[ETO]], run separately from site selection but linked.\nCoordinated-by [[ETO]]",
+      "hits": "",
+      "doesNotHit": "",
+      "source": "",
+      "connects": [
+        "ETO"
+      ],
+      "bet": 12.6,
+      "tier": "Connector",
+      "component": 0
+    },
+    {
+      "id": "Gradient - Host-nation framing",
+      "label": "Gradient - Host-nation framing",
+      "type": "Gradient",
+      "status": "live",
+      "kind": "",
+      "hub": "",
+      "desc": "Moving toward one host (NL national interest plus reserved BE contributions), at the cost of the shared financing vehicle that never gets built because national rails already work. Threshold: the Site decision.",
+      "movements": "Moving toward one host (NL national interest plus reserved BE contributions), at the cost of the shared financing vehicle that never gets built because national rails already work. Threshold: the [[Site decision]].",
+      "hits": "",
+      "doesNotHit": "",
+      "source": "",
+      "connects": [
+        "Site decision"
+      ],
+      "bet": 0.0,
+      "tier": "Leaf",
+      "component": 0
+    },
+    {
+      "id": "Interreg EMR",
+      "label": "Interreg EMR",
+      "type": "Instrument",
+      "status": "live",
+      "kind": "grant programme",
+      "hub": "",
+      "desc": "The one channel that moves money ACROSS the border. Cross-border consortium mandatory.",
+      "movements": "The one channel that moves money ACROSS the border. Cross-border consortium mandatory.\nAnchored-in [[EU]] · routes-funds-to [[ET2SMEs voucher]] [[E-TEST]]",
+      "hits": "cross-border consortia.",
+      "doesNotHit": "the 1.9 Bn build (that needs the Financing vehicle (ghost)).",
+      "source": "",
+      "connects": [
+        "EU",
+        "ET2SMEs voucher",
+        "E-TEST"
+      ],
+      "bet": 177.8,
+      "tier": "Load-bearing",
+      "component": 0
+    },
+    {
+      "id": "Lifecycle horizon (ghost)",
+      "label": "Lifecycle horizon (ghost)",
+      "type": "Ghost",
+      "status": "ghost",
+      "kind": "",
+      "hub": "",
+      "desc": "The long view: upgrade path, decommissioning, and succession from the reference detector to ET. The map is thick with the decision to build and thin on the decades after. Research: is a lifecycle plan public?",
+      "movements": "The long view: upgrade path, decommissioning, and succession from the reference detector to ET. The map is thick with the decision to build and thin on the decades after. Research: is a lifecycle plan public?\nRequired-by [[ET instrument]] · relates-to [[Geometry Comparison]]",
+      "hits": "",
+      "doesNotHit": "",
+      "source": "",
+      "connects": [
+        "ET instrument",
+        "Geometry Comparison"
+      ],
+      "bet": 21.2,
+      "tier": "Connector",
+      "component": 0
+    },
+    {
+      "id": "Lusatia",
+      "label": "Lusatia",
+      "type": "Jurisdiction",
+      "status": "live",
+      "kind": "",
+      "hub": "",
+      "desc": "A territorial or legal authority envelope.",
+      "movements": "A territorial or legal authority envelope.",
+      "hits": "",
+      "doesNotHit": "",
+      "source": "",
+      "connects": [],
+      "bet": 0.0,
+      "tier": "Leaf",
+      "component": 0
+    },
+    {
+      "id": "NL",
+      "label": "NL",
+      "type": "Jurisdiction",
+      "status": "live",
+      "kind": "",
+      "hub": "",
+      "desc": "A territorial or legal authority envelope.",
+      "movements": "A territorial or legal authority envelope.",
+      "hits": "",
+      "doesNotHit": "",
+      "source": "",
+      "connects": [],
+      "bet": 0.0,
+      "tier": "Leaf",
+      "component": 0
+    },
+    {
+      "id": "NWO",
+      "label": "NWO",
+      "type": "Instrument",
+      "status": "live",
+      "kind": "national research funder",
+      "hub": "",
+      "desc": "Dutch science funder. Pays ONLY Dutch institutions.",
+      "movements": "Dutch science funder. Pays ONLY Dutch institutions.\nServes [[NL]] · contested-in [[Tension - National funding silos]]",
+      "hits": "",
+      "doesNotHit": "",
+      "source": "",
+      "connects": [
+        "NL",
+        "Tension - National funding silos"
+      ],
+      "bet": 38.0,
+      "tier": "Connector",
+      "component": 0
+    },
+    {
+      "id": "RWTH Aachen",
+      "label": "RWTH Aachen",
+      "type": "Actor",
+      "status": "live",
+      "kind": "",
+      "hub": "",
+      "desc": "German anchor institution. Partner in E-TEST.",
+      "movements": "German anchor institution. Partner in [[E-TEST]].\nHome [[DE-NRW]] · funded-via [[DFG]] · partner-in [[E-TEST]]",
+      "hits": "",
+      "doesNotHit": "",
+      "source": "",
+      "connects": [
+        "E-TEST",
+        "DE-NRW",
+        "DFG"
+      ],
+      "bet": 36.9,
+      "tier": "Connector",
+      "component": 0
+    },
+    {
+      "id": "Sardinia",
+      "label": "Sardinia",
+      "type": "Jurisdiction",
+      "status": "live",
+      "kind": "",
+      "hub": "",
+      "desc": "A territorial or legal authority envelope.",
+      "movements": "A territorial or legal authority envelope.",
+      "hits": "",
+      "doesNotHit": "",
+      "source": "",
+      "connects": [],
+      "bet": 0.0,
+      "tier": "Leaf",
+      "component": 0
+    },
+    {
+      "id": "Security (physical and digital) (ghost)",
+      "label": "Security (physical and digital) (ghost)",
+      "type": "Ghost",
+      "status": "ghost",
+      "kind": "",
+      "hub": "",
+      "desc": "A security posture for a 1.9 Bn multi-decade fixed installation: physical protection and cyber defence. Absent from public artifacts. Research: genuinely absent, or non-public in the bidbook? A complete model of a mega-infrastructure carries this.",
+      "movements": "A security posture for a 1.9 Bn multi-decade fixed installation: physical protection and cyber defence. Absent from public artifacts. Research: genuinely absent, or non-public in the bidbook? A complete model of a mega-infrastructure carries this.\nRequired-by [[ET instrument]] [[Site decision]]",
+      "hits": "",
+      "doesNotHit": "",
+      "source": "",
+      "connects": [
+        "ET instrument",
+        "Site decision"
+      ],
+      "bet": 8.0,
+      "tier": "Connector",
+      "component": 0
+    },
+    {
+      "id": "SILENT",
+      "label": "SILENT",
+      "type": "Capability",
+      "status": "live",
+      "kind": "",
+      "hub": "",
+      "desc": "Ultra-stable levitated platform. Held by one PI at ULiege, on a single-researcher grant.",
+      "movements": "Ultra-stable levitated platform. Held by one PI at [[ULiege]], on a single-researcher grant.\nHeld-by [[ULiege]] · funded-by [[ERC Consolidator]] · part-of [[E-TEST]]",
+      "hits": "the detector low-frequency noise floor.",
+      "doesNotHit": "vacuum/cryo procurement (funded separately).",
+      "source": "",
+      "connects": [
+        "ULiege",
+        "ERC Consolidator",
+        "E-TEST"
+      ],
+      "bet": 11.2,
+      "tier": "Connector",
+      "component": 0
+    },
+    {
+      "id": "Site decision",
+      "label": "Site decision",
+      "type": "Decision",
+      "status": "pending",
+      "kind": "",
+      "hub": "",
+      "desc": "Which candidate hosts the detector. Not yet made; the process has slipped for years.",
+      "movements": "Which candidate hosts the detector. Not yet made; the process has slipped for years.\nCandidates [[EU-Meuse-Rhine]] [[Sardinia]] [[Lusatia]] · fed-by [[Bidbook]] [[Working Group - Site Selection]] · sharpens [[Gradient - Host-nation framing]]",
+      "hits": "",
+      "doesNotHit": "",
+      "source": "",
+      "connects": [
+        "EU-Meuse-Rhine",
+        "Sardinia",
+        "Lusatia",
+        "Bidbook",
+        "Working Group - Site Selection",
+        "Gradient - Host-nation framing"
+      ],
+      "bet": 125.8,
+      "tier": "Load-bearing",
+      "component": 0
+    },
+    {
+      "id": "Sovereign zone (ghost)",
+      "label": "Sovereign zone (ghost)",
+      "type": "Ghost",
+      "status": "ghost",
+      "kind": "",
+      "hub": "",
+      "desc": "Named in conversation, no legal instrument, no authority holds it. Design around it and you build a world that does not exist.",
+      "movements": "Named in conversation, no legal instrument, no authority holds it. Design around it and you build a world that does not exist.",
+      "hits": "",
+      "doesNotHit": "",
+      "source": "",
+      "connects": [],
+      "bet": 0.0,
+      "tier": "Leaf",
+      "component": 1
+    },
+    {
+      "id": "Tension - National funding silos",
+      "label": "Tension - National funding silos",
+      "type": "Tension",
+      "status": "live",
+      "kind": "",
+      "hub": "",
+      "desc": "Each euro of research money is locked to its national funder territory. A joint programme has no home funder; no funder may pay across the border. Structural, not a problem to be met away.",
+      "movements": "Each euro of research money is locked to its national funder territory. A joint programme has no home funder; no funder may pay across the border. Structural, not a problem to be met away.\nContests [[DFG]] [[NWO]] [[FWO]] [[FNRS]] [[ERC Consolidator]] [[Interreg EMR]]",
+      "hits": "",
+      "doesNotHit": "",
+      "source": "",
+      "connects": [
+        "DFG",
+        "NWO",
+        "FWO",
+        "FNRS",
+        "ERC Consolidator",
+        "Interreg EMR"
+      ],
+      "bet": 213.8,
+      "tier": "Load-bearing",
+      "component": 0
+    },
+    {
+      "id": "ULiege",
+      "label": "ULiege",
+      "type": "Actor",
+      "status": "live",
+      "kind": "",
+      "hub": "",
+      "desc": "Frankophone Belgian anchor. Holds SILENT; partner in E-TEST.",
+      "movements": "Frankophone Belgian anchor. Holds [[SILENT]]; partner in [[E-TEST]].\nHome [[BE-Wallonia]] · funded-via [[FNRS]] · holds [[SILENT]] · partner-in [[E-TEST]]",
+      "hits": "",
+      "doesNotHit": "",
+      "source": "",
+      "connects": [
+        "SILENT",
+        "E-TEST",
+        "BE-Wallonia",
+        "FNRS"
+      ],
+      "bet": 19.0,
+      "tier": "Connector",
+      "component": 0
+    },
+    {
+      "id": "Value capture (ghost)",
+      "label": "Value capture (ghost)",
+      "type": "Ghost",
+      "status": "ghost",
+      "kind": "",
+      "hub": "",
+      "desc": "The economics: regional jobs, return to each contributing nation, who captures the value of the build. Thin to absent in public artifacts. Research: is a value-return model held anywhere?",
+      "movements": "The economics: regional jobs, return to each contributing nation, who captures the value of the build. Thin to absent in public artifacts. Research: is a value-return model held anywhere?\nRelates-to [[Tension - National funding silos]] [[Interreg EMR]] [[AGIT]]",
+      "hits": "",
+      "doesNotHit": "",
+      "source": "",
+      "connects": [
+        "Tension - National funding silos",
+        "Interreg EMR",
+        "AGIT"
+      ],
+      "bet": 53.1,
+      "tier": "Bridge",
+      "component": 0
+    },
+    {
+      "id": "Working Group - Site Selection",
+      "label": "Working Group - Site Selection",
+      "type": "Actor",
+      "status": "live",
+      "kind": "",
+      "hub": "",
+      "desc": "Led by Andrew Harrison, installed by BGR. 20 core plus 8 additional; four experts deliberately from non-host countries. Four sub-groups incl. costings and finance. Output is criteria for the Bidbook, not a site assessment. Report due end-2026.",
+      "movements": "Led by Andrew Harrison, installed by [[BGR]]. 20 core plus 8 additional; four experts deliberately from non-host countries. Four sub-groups incl. costings and finance. Output is criteria for the [[Bidbook]], not a site assessment. Report due end-2026.\nInstalled-by [[BGR]] · coordinates-with [[ETO]] · governs [[Bidbook]] · feeds [[Site decision]] · touches [[EU-Meuse-Rhine]] [[Sardinia]] [[Lusatia]]",
+      "hits": "bidbook criteria, data comparability across sites.",
+      "doesNotHit": "the Geometry Comparison (separate track).",
+      "source": "",
+      "connects": [
+        "BGR",
+        "Bidbook",
+        "ETO",
+        "Site decision",
+        "EU-Meuse-Rhine",
+        "Sardinia",
+        "Lusatia"
+      ],
+      "bet": 204.1,
+      "tier": "Load-bearing",
+      "component": 0
+    }
+  ],
+  "edges": [
+    [
+      "AGIT",
+      "ET2SMEs voucher"
+    ],
+    [
+      "AGIT",
+      "Value capture (ghost)"
+    ],
+    [
+      "AGIT",
+      "DE-NRW"
+    ],
+    [
+      "AGIT",
+      "RWTH Aachen"
+    ],
+    [
+      "AGIT",
+      "CRAFT registry"
+    ],
+    [
+      "AGIT",
+      "ET-InnoNet"
+    ],
+    [
+      "Cross-border IP framework (ghost)",
+      "ET2SMEs voucher"
+    ],
+    [
+      "ET-InnoNet",
+      "ET2SMEs voucher"
+    ],
+    [
+      "ET2SMEs voucher",
+      "Interreg EMR"
+    ],
+    [
+      "CRAFT registry",
+      "ET-InnoNet"
+    ],
+    [
+      "AI coordination layer (ghost)",
+      "CRAFT registry"
+    ],
+    [
+      "CRAFT registry",
+      "Events and workshops"
+    ],
+    [
+      "DE-NRW",
+      "DFG"
+    ],
+    [
+      "DE-NRW",
+      "RWTH Aachen"
+    ],
+    [
+      "DFG",
+      "RWTH Aachen"
+    ],
+    [
+      "E-TEST",
+      "RWTH Aachen"
+    ],
+    [
+      "AI coordination layer (ghost)",
+      "ET-InnoNet"
+    ],
+    [
+      "ET-EMR news",
+      "ET-InnoNet"
+    ],
+    [
+      "ET-InnoNet",
+      "Events and workshops"
+    ],
+    [
+      "BGR",
+      "Working Group - Site Selection"
+    ],
+    [
+      "ET-EMR news",
+      "Working Group - Site Selection"
+    ],
+    [
+      "Bidbook",
+      "Working Group - Site Selection"
+    ],
+    [
+      "Sardinia",
+      "Working Group - Site Selection"
+    ],
+    [
+      "EU-Meuse-Rhine",
+      "Working Group - Site Selection"
+    ],
+    [
+      "Site decision",
+      "Working Group - Site Selection"
+    ],
+    [
+      "ETO",
+      "Working Group - Site Selection"
+    ],
+    [
+      "Lusatia",
+      "Working Group - Site Selection"
+    ],
+    [
+      "Bidbook",
+      "Site decision"
+    ],
+    [
+      "Sardinia",
+      "Site decision"
+    ],
+    [
+      "Financing vehicle (ghost)",
+      "Site decision"
+    ],
+    [
+      "EU-Meuse-Rhine",
+      "Site decision"
+    ],
+    [
+      "Gradient - Host-nation framing",
+      "Site decision"
+    ],
+    [
+      "Security (physical and digital) (ghost)",
+      "Site decision"
+    ],
+    [
+      "Lusatia",
+      "Site decision"
+    ],
+    [
+      "Cross-border IP framework (ghost)",
+      "Interreg EMR"
+    ],
+    [
+      "EU",
+      "Interreg EMR"
+    ],
+    [
+      "E-TEST",
+      "Interreg EMR"
+    ],
+    [
+      "Interreg EMR",
+      "Value capture (ghost)"
+    ],
+    [
+      "Interreg EMR",
+      "Tension - National funding silos"
+    ],
+    [
+      "DFG",
+      "Tension - National funding silos"
+    ],
+    [
+      "NWO",
+      "Tension - National funding silos"
+    ],
+    [
+      "FWO",
+      "Tension - National funding silos"
+    ],
+    [
+      "FNRS",
+      "Tension - National funding silos"
+    ],
+    [
+      "Tension - National funding silos",
+      "Value capture (ghost)"
+    ],
+    [
+      "ERC Consolidator",
+      "Tension - National funding silos"
+    ],
+    [
+      "E-TEST",
+      "ULiege"
+    ],
+    [
+      "E-TEST",
+      "SILENT"
+    ],
+    [
+      "FNRS",
+      "ULiege"
+    ],
+    [
+      "SILENT",
+      "ULiege"
+    ],
+    [
+      "BE-Wallonia",
+      "ULiege"
+    ],
+    [
+      "ERC Consolidator",
+      "SILENT"
+    ],
+    [
+      "ERC Consolidator",
+      "EU"
+    ],
+    [
+      "ESFRI framework",
+      "EU"
+    ],
+    [
+      "ESFRI framework",
+      "Financing vehicle (ghost)"
+    ],
+    [
+      "ESFRI framework",
+      "ET instrument"
+    ],
+    [
+      "ET instrument",
+      "Lifecycle horizon (ghost)"
+    ],
+    [
+      "ET instrument",
+      "Security (physical and digital) (ghost)"
+    ],
+    [
+      "ET instrument",
+      "Financing vehicle (ghost)"
+    ],
+    [
+      "ETO",
+      "Geometry Comparison"
+    ],
+    [
+      "Geometry Comparison",
+      "Lifecycle horizon (ghost)"
+    ],
+    [
+      "BE-Wallonia",
+      "FNRS"
+    ],
+    [
+      "BE-Flanders",
+      "FWO"
+    ],
+    [
+      "NL",
+      "NWO"
+    ]
+  ],
+  "hero": {
+    "id": "Financing vehicle (ghost)",
+    "label": "Financing vehicle (ghost)",
+    "bet": 83.8
+  },
+  "topReal": {
+    "id": "ET-InnoNet",
+    "label": "ET-InnoNet",
+    "bet": 218.9
+  },
+  "northStar": "The telos the whole map is measured against: a self-sustaining cross-border research-and-industry ecosystem that wins the detector and then keeps it alive.",
+  "components": [
+    {
+      "index": 0,
+      "nodes": [
+        "AGIT",
+        "AI coordination layer (ghost)",
+        "BE-Flanders",
+        "BE-Wallonia",
+        "BGR",
+        "Bidbook",
+        "CRAFT registry",
+        "Cross-border IP framework (ghost)",
+        "DE-NRW",
+        "DFG",
+        "E-TEST",
+        "ERC Consolidator",
+        "ESFRI framework",
+        "ET instrument",
+        "ET-EMR news",
+        "ET-InnoNet",
+        "ET2SMEs voucher",
+        "ETO",
+        "EU",
+        "EU-Meuse-Rhine",
+        "Events and workshops",
+        "FNRS",
+        "FWO",
+        "Financing vehicle (ghost)",
+        "Geometry Comparison",
+        "Gradient - Host-nation framing",
+        "Interreg EMR",
+        "Lifecycle horizon (ghost)",
+        "Lusatia",
+        "NL",
+        "NWO",
+        "RWTH Aachen",
+        "SILENT",
+        "Sardinia",
+        "Security (physical and digital) (ghost)",
+        "Site decision",
+        "Tension - National funding silos",
+        "ULiege",
+        "Value capture (ghost)",
+        "Working Group - Site Selection"
+      ],
+      "size": 40,
+      "island": false,
+      "label": "main"
+    },
+    {
+      "index": 1,
+      "nodes": [
+        "Sovereign zone (ghost)"
+      ],
+      "size": 1,
+      "island": true,
+      "label": "Sovereign zone (ghost)"
+    }
+  ],
+  "componentMap": {
+    "AGIT": 0,
+    "AI coordination layer (ghost)": 0,
+    "BE-Flanders": 0,
+    "BE-Wallonia": 0,
+    "BGR": 0,
+    "Bidbook": 0,
+    "CRAFT registry": 0,
+    "Cross-border IP framework (ghost)": 0,
+    "DE-NRW": 0,
+    "DFG": 0,
+    "E-TEST": 0,
+    "ERC Consolidator": 0,
+    "ESFRI framework": 0,
+    "ET instrument": 0,
+    "ET-EMR news": 0,
+    "ET-InnoNet": 0,
+    "ET2SMEs voucher": 0,
+    "ETO": 0,
+    "EU": 0,
+    "EU-Meuse-Rhine": 0,
+    "Events and workshops": 0,
+    "FNRS": 0,
+    "FWO": 0,
+    "Financing vehicle (ghost)": 0,
+    "Geometry Comparison": 0,
+    "Gradient - Host-nation framing": 0,
+    "Interreg EMR": 0,
+    "Lifecycle horizon (ghost)": 0,
+    "Lusatia": 0,
+    "NL": 0,
+    "NWO": 0,
+    "RWTH Aachen": 0,
+    "SILENT": 0,
+    "Sardinia": 0,
+    "Security (physical and digital) (ghost)": 0,
+    "Site decision": 0,
+    "Tension - National funding silos": 0,
+    "ULiege": 0,
+    "Value capture (ghost)": 0,
+    "Working Group - Site Selection": 0,
+    "Sovereign zone (ghost)": 1
+  },
+  "openingGap": "Value capture (ghost)"
+}

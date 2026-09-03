@@ -22,10 +22,13 @@ Usage:
     python gap-scan.py [path-to-map-folder]
 Defaults to ../map relative to this file.
 """
-import os, re, sys
-from collections import deque, defaultdict
+import os, sys
+from collections import defaultdict
 
 HERE = os.path.dirname(os.path.abspath(__file__))
+sys.path.insert(0, HERE)
+from graph_utils import split_fm, LINK, movements_zone, brandes, communities, connected_components, bfs_all
+
 MAP = sys.argv[1] if len(sys.argv) > 1 else os.path.join(HERE, "..", "map")
 
 # ---- load notes ------------------------------------------------------------
@@ -39,19 +42,10 @@ if not files:
 
 name = lambda p: os.path.splitext(os.path.basename(p))[0]
 
-def frontmatter(txt):
-    fm = {}
-    if txt.startswith("---"):
-        end = txt.find("\n---", 3)
-        if end != -1:
-            for line in txt[3:end].splitlines():
-                if ":" in line:
-                    k, v = line.split(":", 1)
-                    fm[k.strip().lower()] = v.strip().lower()
-    return fm
-
-raw = {name(p): open(p, encoding="utf-8").read() for p in files}
-meta = {n: frontmatter(t) for n, t in raw.items()}
+# parse each file once: fm (lowercased values for is_nav/is_ghost checks) + body
+parsed = {name(p): split_fm(open(p, encoding="utf-8").read()) for p in files}
+meta   = {n: {k: v.lower() for k, v in fm.items()} for n, (fm, _) in parsed.items()}
+bodies = {n: body for n, (_, body) in parsed.items()}
 
 def is_nav(n):
     fm = meta.get(n, {})
@@ -62,44 +56,13 @@ def is_ghost(n):
 # The object graph: navigation nodes (catalog, north star) are excluded from the
 # graph itself, not just from the report. A table-of-contents node that links to
 # everything would otherwise absorb the paths and distort every score.
-nodes = set(n for n in raw if not is_nav(n))
+nodes = set(n for n in parsed if not is_nav(n))
 adj = defaultdict(set)
-link_re = re.compile(r"\[\[([^\]|#]+)")
 
-def movements_zone(txt):
-    """Extract the typed-movements zone of a card, where [[wikilinks]] are
-    structural edges. Skips frontmatter, title, description paragraph, and
-    stops before Hits/Does-not-hit/Source lines. This mirrors the Terroir
-    principle: only canonical typed relationships count as graph edges."""
-    body = txt
-    if txt.startswith("---"):
-        end = txt.find("\n---", 3)
-        if end != -1: body = txt[end+4:]
-    lines = body.splitlines()
-    past_title = False
-    past_desc = False
-    blank_after_desc = False
-    zone = []
-    for line in lines:
-        s = line.strip()
-        if not past_title:
-            if s.startswith("# "): past_title = True
-            continue
-        if not past_desc:
-            if not s: past_desc = True
-            continue
-        sl = s.lower()
-        if sl.startswith("- hits:") or sl.startswith("- does not hit:"):
-            break
-        if sl.startswith("source:"):
-            break
-        if s: zone.append(line)
-    return "\n".join(zone)
-
-for s, txt in raw.items():
+for s, body in bodies.items():
     if is_nav(s): continue
-    mzone = movements_zone(txt)
-    for m in link_re.findall(mzone):
+    mzone = movements_zone(body)
+    for m in LINK.findall(mzone):
         t = m.strip()
         if t != s and t in nodes:
             adj[s].add(t); adj[t].add(s)
@@ -107,50 +70,9 @@ for n in nodes:
     adj[n]
 
 # ---- betweenness (Brandes) -------------------------------------------------
-def brandes(adj):
-    CB = {v: 0.0 for v in adj}
-    for s in adj:
-        S = []; P = {w: [] for w in adj}; sig = {w: 0 for w in adj}; sig[s] = 1
-        d = {w: -1 for w in adj}; d[s] = 0; Q = deque([s])
-        while Q:
-            v = Q.popleft(); S.append(v)
-            for w in adj[v]:
-                if d[w] < 0: d[w] = d[v] + 1; Q.append(w)
-                if d[w] == d[v] + 1: sig[w] += sig[v]; P[w].append(v)
-        dl = {w: 0.0 for w in adj}
-        while S:
-            w = S.pop()
-            for v in P[w]: dl[v] += (sig[v] / sig[w]) * (1 + dl[w])
-            if w != s: CB[w] += dl[w]
-    for v in CB: CB[v] /= 2.0
-    return CB
+bet = brandes(adj)
 
 # ---- greedy modularity communities -----------------------------------------
-def communities(adj):
-    m = sum(len(v) for v in adj) // 2
-    if m == 0: return {n: i for i, n in enumerate(adj)}
-    cof = {n: n for n in adj}; members = {n: {n} for n in adj}
-    degc = {n: len(adj[n]) for n in adj}
-    def lij(a, b):
-        return sum(1 for x in members[a] for y in adj[x] if cof[y] == b)
-    improved = True
-    while improved:
-        improved = False; best = None; bestdq = 1e-9
-        pairs = set()
-        for x in adj:
-            for y in adj[x]:
-                a, b = cof[x], cof[y]
-                if a != b: pairs.add(tuple(sorted((a, b))))
-        for (a, b) in pairs:
-            dq = lij(a, b) / m - (degc[a] * degc[b]) / (2 * m * m)
-            if dq > bestdq: bestdq = dq; best = (a, b)
-        if best:
-            a, b = best; members[a] |= members[b]
-            for n in members[b]: cof[n] = a
-            degc[a] += degc[b]; del members[b]; del degc[b]; improved = True
-    return cof
-
-bet = brandes(adj)
 cof = communities(adj)
 comm = defaultdict(list)
 for n, c in cof.items(): comm[c].append(n)
@@ -199,3 +121,34 @@ for i in range(len(clusters)):
 if not found:
     print("  none: the clusters that exist are bridged. The seam between them")
     print("  (and any ghost sitting on it) is where to look next.")
+
+# ---- reachability ----------------------------------------------------------
+comps = connected_components(adj)
+
+print("\n=== REACHABILITY ===")
+if len(comps) == 1:
+    print(f"  fully connected: all {len(comps[0])} nodes in one component")
+else:
+    print(f"  {len(comps)} components:")
+    for i, c in enumerate(comps):
+        if len(c) == 1:
+            label = c[0]
+            deg = len(adj.get(label, []))
+            print(f"  ISLAND (deg {deg}): {label}" + ("   [GHOST]" if is_ghost(label) else ""))
+        else:
+            print(f"  component {i}: {len(c)} nodes  ({', '.join(c[:3])}{'...' if len(c) > 3 else ''})")
+
+# reachable-but-unlinked: ghost nodes at distance 2 from a non-ghost in the main component
+print("\n  reachable-but-unlinked (ghost at distance 2 -- possible missing edge):")
+found_ru = False
+if comps:
+    main = set(comps[0])
+    for n in sorted(main):
+        if not is_ghost(n): continue
+        dist = bfs_all(adj, n)
+        for other, d in sorted(dist.items()):
+            if d == 2 and other in main and other not in adj[n] and not is_ghost(other):
+                print(f"    {n}  --2-->  {other}")
+                found_ru = True
+if not found_ru:
+    print("    none")

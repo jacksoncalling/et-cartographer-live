@@ -13,9 +13,12 @@ One builder, one graph rule, N territories. The only per-territory differences
 each map's build.json, not in this code.
 """
 import os, re, json, sys
-from collections import deque, defaultdict
+from collections import defaultdict
 
 HERE = os.path.dirname(os.path.abspath(__file__))
+sys.path.insert(0, HERE)
+from graph_utils import split_fm, clean, LINK, movements_zone, parse_body, brandes, communities
+
 ROOT = os.path.join(HERE, "..")
 MAPARG = sys.argv[1] if len(sys.argv) > 1 else "map"
 MAP = os.path.join(ROOT, MAPARG)
@@ -30,24 +33,7 @@ REPO_BASE = cfg.get("repo_base", "").rstrip("/")
 EXCLUDE = {"Catalog", "North Star"}
 
 name = lambda p: os.path.splitext(os.path.basename(p))[0]
-
 def read(p): return open(p, encoding="utf-8").read()
-
-def split_fm(txt):
-    fm = {}
-    body = txt
-    if txt.startswith("---"):
-        end = txt.find("\n---", 3)
-        if end != -1:
-            for line in txt[3:end].splitlines():
-                if ":" in line:
-                    k, v = line.split(":", 1)
-                    fm[k.strip().lower()] = v.strip()
-            body = txt[end+4:]
-    return fm, body
-
-LINK = re.compile(r"\[\[([^\]|#]+)")
-def clean(s): return s.replace("[[", "").replace("]]", "").strip()
 
 # A source citation is a chain of locators. Turn each URL and each internal
 # path:line into a clickable link (path:line needs the map's repo_base). Plain
@@ -77,50 +63,6 @@ def linkify_source(text):
         return '<a href="%s/%s%s" target="_blank" rel="noopener">%s</a>' % (
             REPO_BASE, path, frag, label)
     return SRC_TOKEN.sub(repl, text)
-
-def parse_body(body):
-    lines = body.splitlines()
-    title = None; i = 0
-    for idx, l in enumerate(lines):
-        if l.startswith("# "): title = l[2:].strip(); i = idx+1; break
-    while i < len(lines) and not lines[i].strip(): i += 1
-    desc = []
-    while i < len(lines) and lines[i].strip():
-        desc.append(lines[i].strip()); i += 1
-    hits = miss = None
-    source = None
-    for idx, l in enumerate(lines):
-        s = l.strip()
-        if s.lower().startswith("- hits:"): hits = clean(s.split(":", 1)[1])
-        elif s.lower().startswith("- does not hit:"): miss = clean(s.split(":", 1)[1])
-        elif s.lower().startswith("source:"):
-            # capture the Source line plus any following non-blank lines (the
-            # optional multi-line [S#] tag form), so the whole reference list is kept.
-            parts = [s.split(":", 1)[1].strip()]
-            j = idx + 1
-            while j < len(lines) and lines[j].strip():
-                parts.append(lines[j].strip()); j += 1
-            source = " ".join(p for p in parts if p)
-    return title, clean(" ".join(desc)), hits, miss, source
-
-def movements_zone(body):
-    """Extract the typed-movements zone where [[wikilinks]] count as edges.
-    Skips title + description paragraph; stops at Hits/Does-not-hit/Source."""
-    lines = body.splitlines()
-    past_title = False; past_desc = False; zone = []
-    for line in lines:
-        s = line.strip()
-        if not past_title:
-            if s.startswith("# "): past_title = True
-            continue
-        if not past_desc:
-            if not s: past_desc = True
-            continue
-        sl = s.lower()
-        if sl.startswith("- hits:") or sl.startswith("- does not hit:"): break
-        if sl.startswith("source:"): break
-        if s: zone.append(line)
-    return "\n".join(zone)
 
 # ---- load ----
 files = []
@@ -158,46 +100,6 @@ for nid, r in records.items():
             adj[nid].add(t); adj[t].add(nid)
 for nid in records: adj[nid]
 
-def brandes(adj):
-    CB = {v: 0.0 for v in adj}
-    for s in adj:
-        S=[]; P={w:[] for w in adj}; sig={w:0 for w in adj}; sig[s]=1
-        d={w:-1 for w in adj}; d[s]=0; Q=deque([s])
-        while Q:
-            v=Q.popleft(); S.append(v)
-            for w in adj[v]:
-                if d[w]<0: d[w]=d[v]+1; Q.append(w)
-                if d[w]==d[v]+1: sig[w]+=sig[v]; P[w].append(v)
-        dl={w:0.0 for w in adj}
-        while S:
-            w=S.pop()
-            for v in P[w]: dl[v]+=(sig[v]/sig[w])*(1+dl[w])
-            if w!=s: CB[w]+=dl[w]
-    for v in CB: CB[v]/=2.0
-    return CB
-
-def communities(adj):
-    m=sum(len(v) for v in adj)//2
-    if m==0: return {n:0 for n in adj}
-    cof={n:n for n in adj}; members={n:{n} for n in adj}; degc={n:len(adj[n]) for n in adj}
-    def lij(a,b): return sum(1 for x in members[a] for y in adj[x] if cof[y]==b)
-    improved=True
-    while improved:
-        improved=False; best=None; bestdq=1e-9
-        pairs=set()
-        for x in adj:
-            for y in adj[x]:
-                a,b=cof[x],cof[y]
-                if a!=b: pairs.add(tuple(sorted((a,b))))
-        for (a,b) in pairs:
-            dq=lij(a,b)/m-(degc[a]*degc[b])/(2*m*m)
-            if dq>bestdq: bestdq=dq; best=(a,b)
-        if best:
-            a,b=best; members[a]|=members[b]
-            for n in members[b]: cof[n]=a
-            degc[a]+=degc[b]; del members[b]; del degc[b]; improved=True
-    return cof
-
 bet = brandes(adj)
 cof = communities(adj)
 comm = defaultdict(list)
@@ -234,8 +136,6 @@ ghosts = [(bet[n], n) for n, r in records.items() if r["status"] == "ghost"]
 hero_bet, hero_id = max(ghosts) if ghosts else max((bet[n], n) for n in records)
 
 # plain-language reach tier: betweenness as a fraction of the map's busiest node.
-# "how much of the map moves if this one changes", so a cold reader never meets a
-# raw betweenness figure. The number is kept for the card's hover tooltip.
 maxbet = max(bet.values()) if bet else 0.0
 def tier_of(b):
     frac = (b / maxbet) if maxbet else 0.0
@@ -266,7 +166,8 @@ top_bet, top_id = max(real) if real else (0.0, "")
 DATA = dict(nodes=nodes, edges=edges,
             hero=dict(id=hero_id, label=hero_id, bet=round(hero_bet, 1)),
             topReal=dict(id=top_id, label=top_id, bet=round(top_bet, 1)),
-            northStar=north_star)
+            northStar=north_star,
+            openingGap=cfg.get("demo", {}).get("openingGap", ""))
 
 tpl = read(TEMPLATE)
 html = tpl.replace("/*__DATA__*/", "const DATA = " + json.dumps(DATA, ensure_ascii=False) + ";")

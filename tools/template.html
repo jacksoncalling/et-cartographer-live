@@ -112,6 +112,46 @@
 
   footer{border-top:1px solid var(--line); color:var(--muted); font-size:12px; padding:18px 0 40px; margin-top:10px}
   footer b{color:var(--text)}
+
+  /* shopkeeper panel */
+  main.chatopen{grid-template-columns:296px 1fr 308px}
+  .chatpanel{display:none; flex-direction:column; border:1px solid var(--line); border-radius:14px; background:var(--surface); align-self:start; position:sticky; top:14px; max-height:calc(100vh - 30px); overflow:hidden}
+  main.chatopen .chatpanel{display:flex}
+  .chatpanel-head{display:flex; justify-content:space-between; align-items:center; padding:12px 14px; border-bottom:1px solid var(--line); flex-shrink:0}
+  .chatpanel-head .sk-label{font-family:var(--mono); font-size:10px; letter-spacing:.2em; text-transform:uppercase; color:var(--accent)}
+  .chatpanel-head .sk-close{background:transparent; border:0; color:var(--faint); cursor:pointer; font-size:16px; line-height:1; padding:2px 4px; border-radius:5px}
+  .chatpanel-head .sk-close:hover{color:var(--text)}
+  .chatmsgs{flex:1; overflow-y:auto; padding:14px; display:flex; flex-direction:column; gap:12px; min-height:160px}
+  .chatmsg{font-size:13.5px; line-height:1.6; word-break:break-word}
+  .chatmsg.agent{color:var(--text)}
+  .chatmsg.user{color:var(--muted); text-align:right; font-size:13px}
+  .chatmsg.info{color:var(--faint); font-size:12px; font-style:italic}
+  .chatmsg.agent b{color:var(--accent)}
+  .chatcursor{display:inline-block; width:2px; height:1em; background:var(--accent); vertical-align:text-bottom; animation:blink .9s step-end infinite}
+  @keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
+  .chatinput-row{display:flex; gap:7px; padding:10px; border-top:1px solid var(--line); flex-shrink:0}
+  .chatinput{flex:1; background:var(--surface2); border:1px solid var(--line); color:var(--text); border-radius:9px; padding:8px 10px; font-family:var(--sans); font-size:13px; resize:none; height:38px; max-height:100px; overflow-y:auto}
+  .chatinput:focus-visible{outline:2px solid var(--accent); outline-offset:1px}
+  .chatsend{background:var(--accent); color:#04201d; border:0; border-radius:9px; padding:8px 12px; cursor:pointer; font-family:var(--mono); font-size:11px; font-weight:700; letter-spacing:.04em; flex-shrink:0}
+  .chatsend:disabled{opacity:.45; cursor:not-allowed}
+  .chattab{position:fixed; right:0; top:50%; transform:translateY(-50%); background:var(--surface); border:1px solid var(--line); border-right:0; border-radius:8px 0 0 8px; padding:12px 7px; cursor:pointer; writing-mode:vertical-rl; font-family:var(--mono); font-size:10px; letter-spacing:.14em; color:var(--accent); z-index:100; display:none}
+  .chattab.visible{display:block}
+  .chatctx{font-family:var(--mono); font-size:10.5px; color:var(--faint); padding:6px 14px 4px; border-top:1px solid var(--line); flex-shrink:0; white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
+
+  /* sources view */
+  .sources-panel{display:none; flex-direction:column; gap:16px}
+  .stage.sourcesmode .card{display:none}
+  .stage.sourcesmode .graph{display:none}
+  .stage.sourcesmode .sources-panel{display:flex}
+  .src-list{display:flex; flex-direction:column; gap:6px; max-height:380px; overflow-y:auto}
+  .src-entry{font-size:13px; color:var(--muted); font-family:var(--mono); line-height:1.5; padding:8px 12px; border:1px solid var(--line); border-radius:8px; background:var(--surface)}
+  .src-entry a{color:var(--accent); text-decoration:none; border-bottom:1px dotted var(--accent-dim)}
+  .src-entry .src-node{color:var(--faint); font-size:11px; margin-bottom:3px}
+  .add-source-box{border:1px solid var(--line); border-radius:12px; background:var(--surface); padding:16px}
+  .add-source-box h4{font-family:var(--mono); font-size:10.5px; letter-spacing:.14em; text-transform:uppercase; color:var(--muted); margin:0 0 10px}
+  .add-source-ta{width:100%; background:var(--surface2); border:1px solid var(--line); color:var(--text); border-radius:9px; padding:10px 12px; font-family:var(--sans); font-size:13px; resize:vertical; min-height:80px}
+  .add-source-ta:focus-visible{outline:2px solid var(--accent); outline-offset:1px}
+  .add-source-btn{margin-top:8px; background:var(--accent); color:#04201d; border:0; border-radius:9px; padding:9px 16px; cursor:pointer; font-family:var(--mono); font-size:11px; font-weight:700; letter-spacing:.04em}
 </style>
 
 <div class="wrap">
@@ -127,6 +167,8 @@
           <button id="btnCards" aria-pressed="true">Cards</button>
           <button id="btnGraph" aria-pressed="false">Network</button>
         </div>
+        <button id="btnSources" style="font-family:var(--mono);font-size:11px;letter-spacing:.1em;background:transparent;border:1px solid var(--line);color:var(--muted);border-radius:9px;padding:8px 13px;cursor:pointer" title="Sources in this map">Sources</button>
+        <button id="btnShopkeeper" style="font-family:var(--mono);font-size:11px;letter-spacing:.1em;background:transparent;border:1px solid var(--line);color:var(--accent);border-radius:9px;padding:8px 13px;cursor:pointer" title="Open the shopkeeper">Shopkeeper</button>
       </div>
     </div>
 
@@ -151,6 +193,18 @@
 
     <section class="stage" id="stage">
       <div class="card" id="card"></div>
+      <div class="sources-panel" id="sourcesPanel">
+        <div class="block">
+          <h4>Sources in this map</h4>
+          <div class="src-list" id="srcList"></div>
+        </div>
+        <div class="add-source-box">
+          <h4>Add a source</h4>
+          <textarea class="add-source-ta" id="addSourceTa" placeholder="Paste a URL, a document excerpt, or share what you know. The shopkeeper will read it and add any new cards it finds."></textarea>
+          <button class="add-source-btn" id="addSourceBtn">Send to shopkeeper</button>
+        </div>
+      </div>
+
       <div class="graph" id="graph">
         <svg id="svg" viewBox="0 0 920 540" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Network of the ecosystem, node size is betweenness centrality"></svg>
         <div class="legend">
@@ -163,7 +217,22 @@
         </div>
       </div>
     </section>
+
+    <div class="chatpanel" id="chatpanel" aria-label="Shopkeeper">
+      <div class="chatpanel-head">
+        <span class="sk-label">Shopkeeper</span>
+        <button class="sk-close" id="btnCloseChat" title="Minimise" aria-label="Close chat">&times;</button>
+      </div>
+      <div class="chatmsgs" id="chatmsgs"></div>
+      <div class="chatctx" id="chatctx" hidden></div>
+      <div class="chatinput-row">
+        <textarea class="chatinput" id="chatinput" placeholder="Ask anything..." aria-label="Chat with the shopkeeper" rows="1"></textarea>
+        <button class="chatsend" id="chatsend" disabled>Send</button>
+      </div>
+    </div>
   </main>
+
+  <button class="chattab" id="chattab" aria-label="Open shopkeeper">Shopkeeper</button>
 
   <footer class="wrap" style="padding-left:0;padding-right:0">
     Independent cartographic analysis built only from public sources (ET-EMR, et2smes.eu, public governance interviews). <b>Not an official Einstein Telescope or AGIT document.</b> Centrality computed with betweenness over the map graph; the file wins where a card and a source disagree.
@@ -228,10 +297,10 @@
     let h = '';
     h += '<div class="kicker">'+n.type+(n.kind?' &middot; '+n.kind:'')+'</div>';
     h += '<h2>'+n.label+'</h2>';
-    h += '<div class="chips">'+statusChip(n)+'<span class="chip cent" title="betweenness '+n.bet.toFixed(1)+'">'+n.tier+'</span>'+(n.hub?'<span class="chip">'+n.hub+'</span>':'')+'</div>';
+    h += '<div class="chips">'+statusChip(n)+'<span class="chip cent">'+n.tier+'</span>'+(n.hub?'<span class="chip">'+n.hub+'</span>':'')+'</div>';
     if(n.desc) h += '<p class="desc">'+n.desc+'</p>';
     if(n.alert){
-      h += '<div class="ghostcallout"><b>Load-bearing absence.</b> This ghost has higher betweenness than most real institutions on the map. Its absence, not its presence, is what holds the structure together.</div>';
+      h += '<div class="ghostcallout"><b>Load-bearing absence.</b> More connections flow through this gap than through most real nodes on the map. Its absence is the structural finding.</div>';
     }
     if(n.connects && n.connects.length){
       h += '<div class="block"><h4>Connects to</h4><div class="conns">';
@@ -255,15 +324,41 @@
   // ---- view toggle ----
   const btnC=document.getElementById('btnCards'), btnG=document.getElementById('btnGraph');
   function setMode(m){
-    const g = m==='graph';
+    const g = m==='graph'; const s = m==='sources';
     stage.classList.toggle('graphmode', g);
+    stage.classList.toggle('sourcesmode', s);
     graphEl.classList.toggle('on', g);
-    btnC.setAttribute('aria-pressed', String(!g));
+    btnC.setAttribute('aria-pressed', String(m==='cards'));
     btnG.setAttribute('aria-pressed', String(g));
     if(g && !svgDrawn) drawGraph();
   }
   btnC.addEventListener('click',()=>setMode('cards'));
   btnG.addEventListener('click',()=>setMode('graph'));
+  document.getElementById('btnSources').addEventListener('click',()=>setMode('sources'));
+
+  // ---- sources view ----
+  (function(){
+    const srcList = document.getElementById('srcList');
+    // collect unique sources from nodes
+    const seen = new Set();
+    DATA.nodes.forEach(n=>{
+      if(!n.source) return;
+      const key = n.source.trim();
+      if(seen.has(key)) return; seen.add(key);
+      const d = document.createElement('div'); d.className='src-entry';
+      const label = document.createElement('div'); label.className='src-node';
+      label.textContent = n.label + ' (' + n.type + ')';
+      const body = document.createElement('div');
+      // turn URLs into links
+      body.innerHTML = key.replace(/(https?:\/\/[^\s;)\]]+)/g,
+        '<a href="$1" target="_blank" rel="noopener">$1</a>');
+      d.appendChild(label); d.appendChild(body);
+      srcList.appendChild(d);
+    });
+    if(!srcList.children.length){
+      srcList.innerHTML = '<div style="color:var(--faint);font-size:13px;padding:8px">No sources recorded yet.</div>';
+    }
+  })();
 
   // ---- graph (seeded force layout) ----
   let svgDrawn=false;
@@ -312,5 +407,214 @@
 
   // ---- boot: open the load-bearing ghost first ----
   select(DATA.hero.id);
+
+  // ---- shopkeeper chat ----
+  (function(){
+    const mainEl = document.querySelector('main');
+    const panel  = document.getElementById('chatpanel');
+    const msgsEl = document.getElementById('chatmsgs');
+    const input  = document.getElementById('chatinput');
+    const sendBtn= document.getElementById('chatsend');
+    const ctxBar = document.getElementById('chatctx');
+    const tab    = document.getElementById('chattab');
+
+    let history = [];   // [{role:'user'|'assistant', content:string}]
+    let currentCard = DATA.hero.id;
+    let streaming = false;
+    let chatReady = false;
+
+    function openChat(){
+      mainEl.classList.add('chatopen');
+      tab.classList.remove('visible');
+      panel.querySelector('.chatmsgs').scrollTop = 9999;
+    }
+    function closeChat(){
+      mainEl.classList.remove('chatopen');
+      tab.classList.add('visible');
+    }
+
+    document.getElementById('btnShopkeeper').addEventListener('click', openChat);
+    document.getElementById('btnCloseChat').addEventListener('click', closeChat);
+    tab.addEventListener('click', openChat);
+
+    function addMsg(role, text){
+      const d = document.createElement('div');
+      d.className = 'chatmsg ' + role;
+      d.textContent = text;
+      msgsEl.appendChild(d);
+      msgsEl.scrollTop = msgsEl.scrollHeight;
+      return d;
+    }
+
+    function setCtx(label){
+      if(label){ ctxBar.textContent = 'Context: ' + label; ctxBar.hidden = false; }
+      else { ctxBar.hidden = true; }
+    }
+
+    // Hook card selection to update context
+    const _origSelect = select;
+    window._selectCard = function(id){
+      currentCard = id;
+      const n = DATA.nodes.find(x=>x.id===id);
+      if(n) setCtx(n.label);
+    };
+    // Patch select calls to also notify context bar (without breaking the original)
+    document.addEventListener('click', e=>{
+      const it = e.target.closest('.item[data-id]');
+      if(it) window._selectCard(it.dataset.id);
+      const conn = e.target.closest('.conn[data-go]');
+      if(conn) window._selectCard(conn.dataset.go);
+    });
+
+    // ---- greeting (hardcoded so it appears before backend warms up) ----
+    const GREETING = 'Welcome. Have a look around, tap anything. When you want help, ask. I can tell you what you\'re looking at, or show you what I found strange.';
+    addMsg('agent', GREETING);
+    history.push({role:'assistant', content: GREETING});
+
+    // ---- check if /chat is available ----
+    fetch('/chat', {method:'OPTIONS'}).then(()=>{
+      chatReady = true;
+      sendBtn.disabled = false;
+    }).catch(()=>{
+      chatReady = false;
+      sendBtn.disabled = false;  // allow sending; will show offline message on fail
+    });
+    sendBtn.disabled = false;
+
+    // ---- auto-grow textarea ----
+    input.addEventListener('input', ()=>{
+      input.style.height = 'auto';
+      input.style.height = Math.min(input.scrollHeight, 100) + 'px';
+    });
+    input.addEventListener('keydown', e=>{
+      if(e.key === 'Enter' && !e.shiftKey){ e.preventDefault(); send(); }
+    });
+    sendBtn.addEventListener('click', send);
+
+    function send(){
+      const text = input.value.trim();
+      if(!text || streaming) return;
+      input.value = ''; input.style.height = 'auto';
+      history.push({role:'user', content: text});
+      addMsg('user', text);
+      streamReply();
+    }
+
+    function streamReply(){
+      streaming = true;
+      sendBtn.disabled = true;
+      const bubble = addMsg('agent', '');
+      const cursor = document.createElement('span');
+      cursor.className = 'chatcursor'; bubble.appendChild(cursor);
+
+      const body = JSON.stringify({
+        messages: history,
+        currentCard: currentCard,
+        openingGap: DATA.openingGap || '',
+      });
+
+      fetch('/chat', {
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body
+      }).then(res=>{
+        if(!res.ok) throw new Error('HTTP ' + res.status);
+        const reader = res.body.getReader();
+        const dec = new TextDecoder();
+        let buf = '';
+        let assembled = '';
+
+        const cleanDisplay = txt => txt.replace(/```json\s*\{"__ingest__":true[\s\S]*?```\s*$/,'').trimEnd();
+
+        function pump(){
+          reader.read().then(({done, value})=>{
+            if(done){
+              cursor.remove();
+              history.push({role:'assistant', content: cleanDisplay(assembled) || assembled});
+              streaming = false; sendBtn.disabled = false;
+              return;
+            }
+            buf += dec.decode(value, {stream:true});
+            const lines = buf.split('\n');
+            buf = lines.pop();
+            lines.forEach(line=>{
+              if(!line.startsWith('data:')) return;
+              const raw = line.slice(5).trim();
+              if(!raw || raw === '[DONE]') return;
+              let evt;
+              try { evt = JSON.parse(raw); } catch{ return; }
+              if(evt.type === 'text'){
+                assembled += evt.delta;
+                bubble.textContent = cleanDisplay(assembled) || assembled;
+                bubble.appendChild(cursor);
+                msgsEl.scrollTop = msgsEl.scrollHeight;
+              } else if(evt.type === 'ingest'){
+                ingestNode(evt);
+              }
+            });
+            pump();
+          }).catch(err=>{
+            cursor.remove();
+            bubble.textContent = 'Connection lost. Try again.';
+            bubble.classList.add('info');
+            streaming = false; sendBtn.disabled = false;
+          });
+        }
+        pump();
+      }).catch(err=>{
+        cursor.remove();
+        bubble.textContent = 'The shopkeeper is offline. The map is still fully browsable.';
+        bubble.classList.add('info');
+        streaming = false; sendBtn.disabled = false;
+      });
+    }
+
+    // ---- ingest: add a new node + edges to DATA and redraw ----
+    function esc(s){ return s ? String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;') : ''; }
+    function ingestNode(evt){
+      if(!evt.node) return;
+      const n = evt.node;
+      // sanitize LLM-controlled string fields before injecting into innerHTML
+      ['label','desc','hits','doesNotHit','source','type','kind','hub'].forEach(k=>{ if(n[k]) n[k]=esc(n[k]); });
+      // translate component index to cluster (0=left, 1=right) for drawGraph positioning
+      if(n.cluster == null) n.cluster = (n.component != null ? Math.min(n.component, 1) : 0);
+      if(!DATA.nodes.find(x=>x.id===n.id)){
+        DATA.nodes.push(n);
+        byId[n.id] = n;
+      }
+      (evt.edges||[]).forEach(([a,b])=>{
+        if(!DATA.edges.find(e=>( (e[0]===a&&e[1]===b)||(e[0]===b&&e[1]===a) ))){
+          DATA.edges.push([a,b]);
+        }
+        if(byId[a]){ (byId[a].connects=byId[a].connects||[]).includes(b)||byId[a].connects.push(b); }
+        if(byId[b]){ (byId[b].connects=byId[b].connects||[]).includes(a)||byId[b].connects.push(a); }
+      });
+      // regenerate catalog item if needed
+      addMsg('info', 'Map updated: ' + n.label + ' added as a cited card.');
+      // force graph redraw on next open
+      svgDrawn = false;
+      // if graph is showing, redraw now
+      if(stage.classList.contains('graphmode')){ svgDrawn=false; drawGraph(); }
+      // if the current card is open, refresh it
+      if(n.id === currentCard) select(n.id);
+    }
+
+    // "Send to shopkeeper" from the Sources view
+    document.getElementById('addSourceBtn').addEventListener('click', ()=>{
+      const ta = document.getElementById('addSourceTa');
+      const text = ta.value.trim();
+      if(!text || streaming) return;
+      const msg = 'I have a source to add:\n\n' + text;
+      ta.value = '';
+      setMode('cards');
+      openChat();
+      history.push({role:'user', content: msg});
+      addMsg('user', msg.length > 80 ? msg.slice(0,80)+'...' : msg);
+      streamReply();
+    });
+
+    // Open panel on load
+    openChat();
+  })();
 })();
 </script>

@@ -4,3 +4,5 @@ __pycache__/
 blind-run/
 video/
 output/blind-et-cartographer.html
+node_modules/
+.env
